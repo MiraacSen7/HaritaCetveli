@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Harita Bilgisi Hesap Cetveli</title>
+<meta name="theme-color" content="#0f4c8a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Harita Cetveli">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<style>
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/barlow-latin-ext-400-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url(fonts/barlow-latin-400-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/barlow-latin-ext-500-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/barlow-latin-500-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/barlow-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/barlow-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/barlow-condensed-latin-ext-500-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 500;
+  src: url(fonts/barlow-condensed-latin-500-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/barlow-condensed-latin-ext-600-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url(fonts/barlow-condensed-latin-600-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/barlow-condensed-latin-ext-700-normal.woff2) format('woff2');
+  unicode-range: U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF;
+}
+@font-face {
+  font-family: 'Barlow Condensed';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url(fonts/barlow-condensed-latin-700-normal.woff2) format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+</style>
+<style>
+/* VOICE: kesin, sakin; eğitim sınıfındaki hesap cetveli — her sonuç adım adım
+   IDEA: topografik pafta ve kitabe — mavi bant, macenta grid aksanı, kart başına kısa ipucu
+   PICTURE: her aracın kendi küçük şekli (plan müşiri karesi, pafta bölmesi, sapma diyagramı) ve büyük sonuç
+   COLOUR and TYPE: harita mavisi bant, beyaz kâğıt, macenta grid; Barlow Condensed başlık + Barlow metin
+   LAYOUT: üstte konu sekmeleri, altında araç kartları ızgarası; telefonda tek sütun */
+:root{color-scheme:light dark;
+--bg:light-dark(#ffffff,#0e1317);--ink:light-dark(#14191e,#e8edf1);--mut:light-dark(#5b6670,#9aa7b2);
+--line:light-dark(#d9dfe4,#26313a);--card:light-dark(#ffffff,#141b21);--field:light-dark(#f3f6f8,#1a232b);--soft:light-dark(#f6f8fa,#11181e);
+--blue:light-dark(#0f4c8a,#123a63);--blue2:light-dark(#1565c0,#6fb1ff);--mag:light-dark(#c4166c,#ff6fb0);--err:light-dark(#b3261e,#ff8a80);--ok:light-dark(#1b6e3a,#7fd49a)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3,.big,.tab{font-family:"Barlow Condensed",Barlow,sans-serif}
+header{position:relative;background:var(--blue);color:#fff;padding:calc(22px + env(safe-area-inset-top)) max(4vw,16px,env(safe-area-inset-right)) 0 max(4vw,16px,env(safe-area-inset-left));overflow:hidden}
+header svg.topo{position:absolute;inset:0;width:100%;height:100%;opacity:.22;pointer-events:none}
+h1{position:relative;margin:0;font-size:clamp(32px,5vw,46px);line-height:1.05;font-weight:700;text-wrap:balance}
+header p{position:relative;margin:6px 0 16px;max-width:68ch;color:#d6e6f7}
+.tabs{position:relative;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tab{flex:none;min-height:46px;padding:8px 16px;border:0;border-radius:10px 10px 0 0;background:rgba(255,255,255,.12);color:#fff;font-size:18px;font-weight:600;cursor:pointer}
+.tab[aria-selected=true]{background:var(--bg);color:var(--ink)}
+:focus-visible{outline:3px solid var(--mag);outline-offset:2px}
+main{max-width:1240px;margin:0 auto;padding:clamp(18px,3vw,36px) max(4vw,16px,env(safe-area-inset-right)) 48px max(4vw,16px,env(safe-area-inset-left))}
+.intro{margin:0 0 18px;color:var(--mut);max-width:80ch}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,370px),1fr));gap:18px;align-items:start}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px 18px}
+.tool>header{all:unset;display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+h3{margin:0;font-size:23px;line-height:1.1}
+.hint{margin:6px 0 0;color:var(--mut);font-size:15px}
+.fields{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px 10px;margin-top:10px;align-items:end}
+.f{grid-column:span 3}.f.w2{grid-column:span 2}.f.w6,.fh{grid-column:1/-1}
+.fh{font:600 16px "Barlow Condensed";color:var(--ink);margin-top:6px;border-top:1px dashed var(--line);padding-top:8px}
+label{display:block;font-size:14px;font-weight:600;color:var(--mut);margin-bottom:3px;line-height:1.25}
+input,select,textarea{width:100%;min-height:44px;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font:16px Barlow,sans-serif;font-variant-numeric:tabular-nums}
+textarea{min-height:110px;resize:vertical}
+.out{margin-top:14px;padding-top:12px;border-top:2px solid var(--ink)}
+.cap{font-size:14px;color:var(--mut)}
+.big{font-size:clamp(30px,4.6vw,44px);line-height:1.08;font-weight:700;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.big small{font-size:.55em;font-weight:600;color:var(--mut)}
+.sub{margin:4px 0 0;font-weight:600}
+.err{color:var(--err);font-weight:600;margin:0}
+.good{color:var(--ok)}.bad{color:var(--err)}
+dl{display:grid;grid-template-columns:minmax(0,max-content) minmax(0,1fr);gap:5px 14px;margin:10px 0 0}
+dt{color:var(--mut);font-size:15px}dd{margin:0;font-weight:600;font-variant-numeric:tabular-nums;text-align:right;overflow-wrap:anywhere}
+details{margin-top:12px;background:var(--soft);border-radius:8px;padding:8px 12px}
+summary{cursor:pointer;font-weight:600;min-height:28px}
+ol{margin:6px 0 2px;padding-left:22px;font-variant-numeric:tabular-nums}ol li{margin:3px 0}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.btn{min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:8px;background:var(--field);color:var(--ink);font:600 15px Barlow,sans-serif;cursor:pointer}
+.btn.pri{background:var(--blue2);border-color:var(--blue2);color:light-dark(#fff,#08131d)}
+svg.fig{display:block;width:100%;height:auto;max-height:260px;margin-top:12px}
+.fig .g{stroke:var(--mag);stroke-width:.8;opacity:.5}.fig .g2{stroke:var(--mag);stroke-width:2}
+.fig .k{stroke:var(--ink);fill:none;stroke-width:2}.fig .kf{fill:var(--ink)}
+.fig .pt{fill:var(--blue2);stroke:var(--card);stroke-width:2.5}.fig .hl{fill:var(--blue2);fill-opacity:.16}
+.fig text{font:12px Barlow;fill:var(--mut)}.fig .tx{font:600 13px Barlow;fill:var(--ink)}.fig .mg{fill:var(--mag);font-weight:600}
+.fig .bl{stroke:var(--blue2);stroke-width:2.5;fill:none}
+table.ref{width:100%;border-collapse:collapse;font-size:15px;margin-top:8px}
+table.ref td{padding:5px 0;border-bottom:1px solid var(--line)}table.ref td:last-child{text-align:right;font-weight:600;white-space:nowrap}
+/* hesap makinesi */
+.calc-in{font:600 22px "Barlow Condensed",sans-serif;text-align:right}
+.keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
+.keys button{min-height:54px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:600 22px "Barlow Condensed",sans-serif;cursor:pointer}
+.keys .op{color:var(--blue2)}.keys .eq{background:var(--blue2);color:light-dark(#fff,#08131d);border-color:var(--blue2)}
+.hist{list-style:none;margin:0;padding:0}
+.hist button{width:100%;display:flex;justify-content:space-between;gap:12px;min-height:44px;padding:6px 4px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:15px Barlow;cursor:pointer;text-align:left}
+.hist b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.empty{color:var(--mut);font-size:15px;padding:6px 0}
+footer{max-width:1240px;margin:0 auto;padding:0 max(4vw,16px) calc(32px + env(safe-area-inset-bottom));color:var(--mut);font-size:13px}
+@media(max-width:600px){.tab{font-size:16px;padding:8px 12px}.tool{padding:14px}.fields{gap:8px}}
+@media(prefers-reduced-motion:no-preference){.panel .tool{animation:in .25s ease-out both}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
+</style>
+</head>
+<body>
+<header>
+<svg class="topo" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="topo"></svg>
+<h1>Harita bilgisi hesap cetveli</h1>
+<p>Harita bilgisi hesapları tek yerde. Haritadan okuduğun sayıları yaz; sonuç ve çözüm adımları sırayla çıksın.</p>
+<nav class="tabs" role="tablist" id="tabs"></nav>
+</header>
+<main id="main"></main>
+<footer>Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ile WGS84 arasındaki geçişte Avrupa geneli için kullanılan ortalama datum farkı (−87, −98, −121 m) alınır; sonuç birkaç metre sapabilir. Girdiğin değerler bu cihazda hatırlanır. İnternet bağlantısı gerekmez.</footer>
+
+<script>
+{
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const store={get(k){try{return localStorage.getItem('hbc:'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('hbc:'+k,v)}catch(e){}}};
+const num=v=>{v=String(v??'').trim().replace(/\s/g,'');if(/,/.test(v)&&!/\./.test(v))v=v.replace(',','.');else v=v.replace(/,/g,'');return v===''?NaN:Number(v)};
+const fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('tr-TR',{maximumFractionDigits:d}):'—';
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rad=d=>d*Math.PI/180,deg=r=>r*180/Math.PI,p2=n=>String(n).padStart(2,'0');
+const toMil=d=>d*6400/360,toDeg=m=>m*360/6400,n64=m=>((m%6400)+6400)%6400,n360=d=>((d%360)+360)%360;
+const WGS={a:6378137,f:1/298.257223563},INT={a:6378388,f:1/297},K0=0.9996;
+/* ---- açı ve koordinat biçimleri ---- */
+function parseDeg(t){t=String(t??'').trim();if(!t)return NaN;const neg=/^-/.test(t)||/[GSBW]$/i.test(t);const ns=t.match(/\d+(?:[.,]\d+)?/g);if(!ns)return NaN;const p=ns.map(x=>Number(x.replace(',','.')));const v=p[0]+(p[1]||0)/60+(p[2]||0)/3600;return neg?-v:v}
+function dmsParts(x,sd=0){x=Math.abs(x);let d=Math.floor(x),m=Math.floor((x-d)*60+1e-9),s=+(((x-d)*60-m)*60).toFixed(sd);if(s>=60){s=0;m++}if(m>=60){m=0;d++}return{d,m,s}}
+function fDMS(x,sd=0,h){const{d,m,s}=dmsParts(x,sd);const ss=sd?s.toFixed(sd).replace('.',',').padStart(3+sd,'0'):p2(s);return `${!h&&x<0?'−':''}${d}° ${p2(m)}′ ${ss}″${h?' '+(x<0?h[1]:h[0]):''}`}
+function fDM(x,md=0){const a=Math.abs(x);let d=Math.floor(a),m=+((a-d)*60).toFixed(md);if(m>=60){m=0;d++}return `${x<0?'−':''}${d}° ${md?m.toFixed(md).replace('.',','):p2(m)}′`}
+const ang=(t,u)=>u==='mil'?num(t)*360/6400:parseDeg(t);
+const showAng=(d,u)=>u==='mil'?fmt(n64(toMil(d)),1)+' milyem':fmt(n360(d),2)+'°';
+/* ---- UTM, datum, MGRS ---- */
+function utmF(lat,lon,el,zf){const e2=el.f*(2-el.f),ep=e2/(1-e2),a=el.a,zone=zf||Math.min(60,Math.floor((lon+180)/6)+1),l0=rad((zone-1)*6-177),p=rad(lat);
+  const N=a/Math.sqrt(1-e2*Math.sin(p)**2),T=Math.tan(p)**2,C=ep*Math.cos(p)**2,A=Math.cos(p)*(rad(lon)-l0),e4=e2*e2,e6=e4*e2;
+  const M=a*((1-e2/4-3*e4/64-5*e6/256)*p-(3*e2/8+3*e4/32+45*e6/1024)*Math.sin(2*p)+(15*e4/256+45*e6/1024)*Math.sin(4*p)-(35*e6/3072)*Math.sin(6*p));
+  const E=K0*N*(A+(1-T+C)*A**3/6+(5-18*T+T*T+72*C-58*ep)*A**5/120)+500000;
+  let Nn=K0*(M+N*Math.tan(p)*(A*A/2+(5-T+9*C+4*C*C)*A**4/24+(61-58*T+T*T+600*C-330*ep)*A**6/720));if(lat<0)Nn+=1e7;return{zone,E,N:Nn}}
+function utmI(zone,h,E,N,el){const e2=el.f*(2-el.f),ep=e2/(1-e2),a=el.a,x=E-500000,y=h==='G'?N-1e7:N,l0=rad((zone-1)*6-177);
+  const e1=(1-Math.sqrt(1-e2))/(1+Math.sqrt(1-e2)),mu=y/K0/(a*(1-e2/4-3*e2*e2/64-5*e2**3/256));
+  const p1=mu+(3*e1/2-27*e1**3/32)*Math.sin(2*mu)+(21*e1*e1/16-55*e1**4/32)*Math.sin(4*mu)+(151*e1**3/96)*Math.sin(6*mu)+(1097*e1**4/512)*Math.sin(8*mu);
+  const s=Math.sin(p1),c=Math.cos(p1),N1=a/Math.sqrt(1-e2*s*s),T1=Math.tan(p1)**2,C1=ep*c*c,R1=a*(1-e2)/(1-e2*s*s)**1.5,D=x/(N1*K0);
+  return{lat:deg(p1-(N1*Math.tan(p1)/R1)*(D*D/2-(5+3*T1+10*C1-4*C1*C1-9*ep)*D**4/24+(61+90*T1+298*C1+45*T1*T1-252*ep-3*C1*C1)*D**6/720)),
+    lon:deg(l0+(D-(1+2*T1+C1)*D**3/6+(5-2*C1+28*T1-3*C1*C1+8*ep+24*T1*T1)*D**5/120)/c)}}
+function toX(lat,lon,el){const e2=el.f*(2-el.f),p=rad(lat),l=rad(lon),N=el.a/Math.sqrt(1-e2*Math.sin(p)**2);return[N*Math.cos(p)*Math.cos(l),N*Math.cos(p)*Math.sin(l),N*(1-e2)*Math.sin(p)]}
+function fromX([x,y,z],el){const e2=el.f*(2-el.f),pp=Math.hypot(x,y);let p=Math.atan2(z,pp*(1-e2));for(let i=0;i<8;i++){const N=el.a/Math.sqrt(1-e2*Math.sin(p)**2),h=pp/Math.cos(p)-N;p=Math.atan2(z,pp*(1-e2*N/(N+h)))}return{lat:deg(p),lon:deg(Math.atan2(y,x))}}
+const ed2wgs=(la,lo)=>{const X=toX(la,lo,INT);return fromX([X[0]-87,X[1]-98,X[2]-121],WGS)};
+const wgs2ed=(la,lo)=>{const X=toX(la,lo,WGS);return fromX([X[0]+87,X[1]+98,X[2]+121],INT)};
+const ROWL='ABCDEFGHJKLMNPQRSTUV',COLS=['ABCDEFGH','JKLMNPQR','STUVWXYZ'],BANDS='CDEFGHJKLMNPQRSTUVWX';
+const band=lat=>BANDS[Math.max(0,Math.min(19,Math.floor((lat+80)/8)))];
+const sq100=(z,E,N)=>(COLS[(z-1)%3][Math.floor(E/1e5)-1]||'?')+ROWL[(Math.floor(N/1e5)+(z%2?0:5))%20];
+const trd=(v,k)=>String(Math.floor((((v%1e5)+1e5)%1e5)/10**(5-k))).padStart(k,'0');
+const mgrs=(z,lat,E,N,k)=>`${z}${band(lat)} ${sq100(z,E,N)} ${trd(E,k)}${trd(N,k)}`;
+const short=(E,N,k)=>trd(E,k)+trd(N,k);
+function full(corner,v5){const base=Math.floor(corner/1e5)*1e5;let x=base+v5;if(x<corner-2000)x+=1e5;return x}
+const wrap=d=>d>5e4?d-1e5:d<-5e4?d+1e5:d;
+function parsePt(str){const s=String(str||'').toUpperCase().trim();let m=/^(\d{5,7})[\s,;]+(\d{6,8})$/.exec(s);if(m)return{abs:true,E:+m[1],N:+m[2],e5:+m[1]%1e5,n5:+m[2]%1e5,k:5,p:1};
+  m=/^(?:(\d{1,2})([C-HJ-NP-X]))?([A-HJ-NP-Z]{2})?(\d+)$/.exec(s.replace(/\s/g,''));if(!m||m[4].length%2||m[4].length>10)return null;
+  const k=m[4].length/2;return{k,p:10**(5-k),e5:Number(m[4].slice(0,k).padEnd(5,'0')),n5:Number(m[4].slice(k).padEnd(5,'0')),zone:m[1]?+m[1]:null,band:m[2]||null,letters:m[3]||null}}
+const PREC={1:'10 km',2:'1000 m',3:'100 m',4:'10 m',5:'1 m'};
+/* ---- tablolar ---- */
+const SC=[['25000','1/25 000'],['50000','1/50 000'],['100000','1/100 000'],['250000','1/250 000']],SCX=[...SC,['x','Başka (aralığı yaz)']];
+const MUN={25000:[10,50,5,2.5],50000:[20,100,10,5],100000:[50,250,25,12.5],250000:[100,500,50,25]};
+const INFO={25000:{paf:'7′30″ × 7′30″',grid:'1 000 m = 4 cm',ust:'1/50 000 paftanın dörtte biri (1, 2, 3, 4)'},50000:{paf:'15′ × 15′',grid:'1 000 m = 2 cm',ust:'1/100 000 paftanın dörtte biri (a, b, c, d)'},100000:{paf:'30′ × 30′',grid:'5 000 m = 5 cm',ust:'1/250 000 paftanın altıda biri'},250000:{paf:'1° enlem × 1°30′ boylam',grid:'10 000 m = 4 cm',ust:'6 adet 1/100 000 paftayı kapsar'}};
+const sinif=n=>[n>=500000?'Küçük ölçekli':n>=100000?'Orta ölçekli':'Büyük ölçekli',n>1000000?'Genel harita':n>=250000?'Stratejik harita':n>=25000?'Taktik harita':'Taktik/teknik (çok büyük ölçek)'];
+const interval=v=>v.s('sc')==='x'?v.n('ara'):MUN[v.s('sc')][0];
+const SCF=[{id:'sc',l:'Harita ölçeği',t:'s',o:SCX,v:'25000'},{id:'ara',l:'İnce münhani aralığı (m)',v:'10',show:v=>v.s('sc')==='x'}];
+const AU=[['deg','Derece'],['mil','Milyem']];
+const lenM=m=>Math.abs(m)>=1000?fmt(m/1000,3)+' km':fmt(m,1)+' m';
+const E=msg=>({err:msg});
+
+/* ---- çizimler ---- */
+function figSquare(gs,gy,ms,my){const s=170,x=30+ms/1000*s,y=200-my/1000*s;let g='';for(let i=1;i<10;i++)g+=`<line class="g" x1="${30+i*17}" y1="30" x2="${30+i*17}" y2="200"/><line class="g" x1="30" y1="${30+i*17}" x2="200" y2="${30+i*17}"/>`;
+  return `<svg class="fig" viewBox="0 0 230 225" role="img" aria-label="1000 metrelik grid karesinde nokta">${g}<rect x="30" y="30" width="170" height="170" class="k"/><line class="bl" x1="30" y1="${y}" x2="${x}" y2="${y}" stroke-dasharray="4 3"/><line class="bl" x1="${x}" y1="200" x2="${x}" y2="${y}" stroke-dasharray="4 3"/><circle class="pt" cx="${x}" cy="${y}" r="6"/>
+  <text class="mg" x="30" y="216" text-anchor="middle">${p2(gs)}</text><text class="mg" x="200" y="216" text-anchor="middle">${p2((gs+1)%100)}</text><text class="mg" x="22" y="204" text-anchor="end">${p2(gy)}</text><text class="mg" x="22" y="34" text-anchor="end">${p2((gy+1)%100)}</text>
+  <text class="tx" x="${Math.min(x+8,170)}" y="${Math.max(y-8,44)}">${fmt(ms,0)} m → , ${fmt(my,0)} m ↑</text></svg>`}
+function figRatio(alt,a,d,D){const x=20+260*Math.min(1,Math.max(0,d/D));let t='';for(let i=1;i<4;i++)t+=`<line class="g" x1="${20+65*i}" y1="30" x2="${20+65*i}" y2="54"/>`;
+  return `<svg class="fig" viewBox="0 0 300 92" role="img" aria-label="İki münhani arasındaki nokta">${t}<line class="k" x1="20" y1="42" x2="280" y2="42"/><line class="g2" x1="20" y1="22" x2="20" y2="62"/><line class="g2" x1="280" y1="22" x2="280" y2="62"/><circle class="pt" cx="${x}" cy="42" r="6"/>
+  <text class="tx" x="20" y="80" text-anchor="middle">${fmt(alt,1)} m</text><text class="tx" x="280" y="80" text-anchor="middle">${fmt(alt+a,1)} m</text><text x="${x}" y="16" text-anchor="middle">${fmt(d,1)} / ${fmt(D,1)} mm</text></svg>`}
+function figSapma(ya,isa){const vis=a=>a?Math.sign(a)*Math.min(26,6+Math.abs(a)*6):0,L=140,cx=150,cy=190;
+  const ln=(a,cls)=>{const r=rad(a);return[cx+L*Math.sin(r),cy-L*Math.cos(r)]};const gk=vis(ya),mk=gk+vis(isa)*(isa?1:0);
+  const [x1,y1]=ln(0),[x2,y2]=ln(gk),[x3,y3]=ln(mk);
+  return `<svg class="fig" viewBox="0 0 300 215" role="img" aria-label="Sapma diyagramı, ölçeksiz"><line class="k" x1="${cx}" y1="${cy}" x2="${x1}" y2="${y1}"/><path class="kf" d="M${x1} ${y1-12}l3.5 7.5 8 .5-6 5.5 2 8-7.5-4.5-7.5 4.5 2-8-6-5.5 8-.5z"/>
+  <line class="k" x1="${cx}" y1="${cy}" x2="${x2}" y2="${y2}" style="stroke:var(--mag)"/><text class="mg" x="${x2+(gk>=0?6:-6)}" y="${y2+4}" text-anchor="${gk>=0?'start':'end'}">GK</text>
+  <line class="bl" x1="${cx}" y1="${cy}" x2="${x3}" y2="${y3}"/><path d="M${x3} ${y3}l${mk>=0?7:-7} 14" class="bl"/><text class="tx" x="${x3+(mk>=0?10:-10)}" y="${y3+14}" text-anchor="${mk>=0?'start':'end'}" style="fill:var(--blue2)">MK</text>
+  <text x="${cx-8}" y="${y1-4}" text-anchor="end">Gerçek K</text><text x="10" y="206">Ölçeksiz · YA ${fmt(toMil(ya),0)} · İSA ${fmt(toMil(isa),0)} milyem</text></svg>`}
+function figP(r){const a=Math.abs(r),mx=Math.max(5,Math.ceil(a)),x0=r<0?260:40,dir=r<0?-1:1,k=220/mx,X=t=>x0+dir*t*k,px=x0,py=205;let g='';
+  for(let t=0;t<=mx*4;t++){const x=X(t/4),big=t%4===0;g+=`<line class="k" x1="${x}" y1="46" x2="${x}" y2="${big?34:40}" style="stroke-width:${big?2:1}"/>`;if(big)g+=`<text x="${x}" y="27" text-anchor="middle">${t/4}°</text>`}
+  const mxp=X(a);
+  return `<svg class="fig" viewBox="0 0 300 228" role="img" aria-label="Pusula sapma göstergesi ve P noktası, ölçeksiz"><line class="k" x1="${Math.min(X(0),X(mx))}" y1="46" x2="${Math.max(X(0),X(mx))}" y2="46"/>${g}
+  <line class="g" x1="${px}" y1="${py}" x2="${px}" y2="50" stroke-dasharray="4 4" style="opacity:.8"/><text class="mg" x="${px+dir*-6}" y="120" text-anchor="${r<0?'start':'end'}">GK</text>
+  <line class="bl" x1="${px}" y1="${py}" x2="${mxp}" y2="46" style="stroke:var(--err)"/><circle class="pt" cx="${mxp}" cy="46" r="5"/><circle cx="${px}" cy="${py}" r="6" fill="none" class="k"/>
+  <text class="tx" x="${px+dir*-10}" y="${py+5}" text-anchor="${r<0?'start':'end'}">P</text><text class="tx" x="${mxp}" y="66" text-anchor="middle">${fDM(a)}</text><text x="150" y="224" text-anchor="middle">Ölçeksiz şema</text></svg>`}
+function figPafta(cell,px,py){let g='';const s=55,o=20;const code=(r,c)=>{const n=r<2,e=c>=2,L=n?(e?'b':'a'):(e?'c':'d'),rn=r%2,cn=c%2;return L+(rn?(cn?3:4):(cn?2:1))};
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){const cd=code(r,c);g+=`<rect x="${o+c*s}" y="${o+r*s}" width="${s}" height="${s}" class="${cd===cell?'hl':''}" fill="${cd===cell?'':'none'}" stroke="var(--line)"/><text x="${o+c*s+s/2}" y="${o+r*s+s/2+4}" text-anchor="middle" class="${cd===cell?'tx':''}">${cd}</text>`}
+  g+=`<rect x="${o}" y="${o}" width="${4*s}" height="${4*s}" class="k"/><line class="k" x1="${o+2*s}" y1="${o}" x2="${o+2*s}" y2="${o+4*s}"/><line class="k" x1="${o}" y1="${o+2*s}" x2="${o+4*s}" y2="${o+2*s}"/>`;
+  if(px!=null)g+=`<circle class="pt" cx="${o+px*4*s}" cy="${o+(1-py)*4*s}" r="6"/>`;
+  return `<svg class="fig" viewBox="0 0 260 260" role="img" aria-label="1/100 000 paftanın 1/50 000 ve 1/25 000 paftalara bölünmesi">${g}</svg>`}
+
+/* ---- araçlar ---- */
+const TABS=[
+['olcek','Ölçek ve mesafe','Harita uzunluğunu araziye, araziyi haritaya çevir; kâğıtla ölçtüğün eğri yolu topla.'],
+['rakim','Rakım ve eğim','Münhanilerden tepe rakımı, iki münhani arasındaki noktanın rakımı ve iki nokta arası eğim.'],
+['cografi','Coğrafi koordinat','Kitabedeki dakika çizgileriyle enlem-boylam okuma, koordinatı haritaya geçirme ve yerel saat farkı.'],
+['grid','Grid koordinatı','Plan müşiriyle okuma, kısa ve tam koordinat, MGRS bildirimi, iki nokta arası mesafe ve GİA.'],
+['aci','Açılar ve pusula','Milyem-derece, geri istikamet açısı, İSA güncelleme, P noktasıyla yönüne koyma, GİA-MİA çevirme, yaklaşma açısı, çentikli bilezik.'],
+['pafta','Pafta ve ölçek bilgisi','Ölçek sınıfları, münhani ve grid aralıkları, paftanın 1/50 000 ve 1/25 000 paftalara bölünmesi.'],
+['hesap','Dört işlem','Parantezli hesap makinesi; ondalık için virgül ya da nokta.']];
+
+const T=[
+/* ÖLÇEK */
+{tab:'olcek',id:'olc',title:'Ölçek: harita ↔ arazi uzunluğu',hint:'Ölçek = Harita uzunluğu ÷ Arazi uzunluğu. Pay ve payda aynı birimde olmalı.',
+f:[{id:'mode',l:'Ne arıyorsun?',t:'s',w:6,o:[['au','Arazi uzunluğu'],['hu','Harita uzunluğu'],['m','Ölçek']],v:'au'},
+{id:'n',l:'Ölçek 1 :',v:'25000',w:6,show:v=>v.s('mode')!=='m'},
+{id:'hu',l:'Harita uzunluğu',v:'4',show:v=>v.s('mode')!=='hu'},{id:'huu',l:'Birim',t:'s',o:[['cm','cm'],['mm','mm']],v:'cm',show:v=>v.s('mode')!=='hu'},
+{id:'au',l:'Arazi uzunluğu',v:'1',show:v=>v.s('mode')!=='au'},{id:'auu',l:'Birim',t:'s',o:[['km','km'],['m','m']],v:'km',show:v=>v.s('mode')!=='au'}],
+calc(v){const md=v.s('mode'),n=v.n('n'),HU=v.n('hu')*(v.s('huu')==='mm'?.1:1),AUc=v.n('au')*(v.s('auu')==='km'?1e5:100);
+ if(md!=='m'&&!(n>0))return E('Ölçek sayısını yaz (örneğin 25000).');
+ if(md==='au'){if(!(HU>=0))return E('Harita uzunluğunu yaz.');const a=HU*n;return{cap:`Haritada ${fmt(HU,2)} cm arazide`,big:lenM(a/100),rows:[['Santimetre',fmt(a,0)+' cm'],['Metre',fmt(a/100,2)+' m'],['Haritada 1 cm',fmt(n/100,1)+' m']],steps:['AU = HU × ölçek sayısı',`AU = ${fmt(HU,2)} cm × ${fmt(n,0)} = ${fmt(a,0)} cm`,`${fmt(a,0)} cm = ${fmt(a/100,2)} m = ${fmt(a/1e5,3)} km`]}}
+ if(md==='hu'){if(!(AUc>=0))return E('Arazi uzunluğunu yaz.');const h=AUc/n;return{cap:'Haritada çizilecek uzunluk',big:fmt(h,2)+' <small>cm</small>',rows:[['Milimetre',fmt(h*10,1)+' mm']],steps:['HU = AU ÷ ölçek sayısı',`AU = ${fmt(AUc,0)} cm`,`HU = ${fmt(AUc,0)} ÷ ${fmt(n,0)} = ${fmt(h,3)} cm`]}}
+ if(!(HU>0)||!(AUc>0))return E('İki uzunluk da sıfırdan büyük olmalı.');const m=AUc/HU,[c1,c2]=sinif(m);
+ return{cap:'Haritanın ölçeği',big:'1 : '+fmt(m,0),rows:[['Ölçeğe göre',c1],['Kullanma maksadına göre',c2]],steps:['Ölçek = HU ÷ AU (aynı birimde)',`HU = ${fmt(HU,2)} cm, AU = ${fmt(AUc,0)} cm`,`Ölçek = ${fmt(HU,2)} ÷ ${fmt(AUc,0)} = 1 / ${fmt(m,0)}`]}}},
+{tab:'olcek',id:'yol',title:'Eğri yol uzunluğu (kâğıtla ölçüm)',hint:'Yolu düz parçalara böl, her parçayı cetvelle ölç ve alt alta yaz.',
+f:[{id:'n',l:'Ölçek 1 :',v:'25000'},{id:'u',l:'Parçaların birimi',t:'s',o:[['cm','cm'],['mm','mm']],v:'cm'},{id:'p',l:'Parça uzunlukları (her satıra bir parça)',t:'ta',w:6,v:'2,4\n1,8\n3,6'}],
+calc(v){const n=v.n('n');if(!(n>0))return E('Ölçek sayısını yaz.');const ps=v.s('p').split(/[\n;+]+/).map(x=>x.trim()).filter(Boolean),vals=ps.map(num);
+ if(!vals.length)return E('En az bir parça uzunluğu yaz.');const bad=vals.findIndex(x=>!(x>=0));if(bad>=0)return E(`${bad+1}. parça okunamadı: “${ps[bad]}”`);
+ const k=v.s('u')==='mm'?.1:1,sum=vals.reduce((a,b)=>a+b,0)*k,m=sum*n/100;
+ return{cap:`${vals.length} parçanın arazideki toplamı`,big:lenM(m),rows:[['Haritada toplam',fmt(sum,2)+' cm'],['Metre',fmt(m,1)+' m']],steps:[`Toplam = ${vals.map(x=>fmt(x,2)).join(' + ')} = ${fmt(sum/k,2)} ${v.s('u')}`,`Arazi = ${fmt(sum,2)} cm × ${fmt(n,0)} = ${fmt(sum*n,0)} cm`,`= ${fmt(m,1)} m`]}}},
+
+/* RAKIM */
+{tab:'rakim',id:'tepe',title:'Tepe (veya çukur) rakımı',hint:'Zirveye en yakın kalın münhaniden başla, ince münhanileri say, en sonda münhani aralığının yarısını ekle.',
+f:[{id:'tur',l:'Arazi',t:'s',o:[['tepe','Tepe (yükselen)'],['cukur','Çukur (alçalan)']],v:'tepe'},...SCF,
+{id:'ana',l:'Kalın (ana) münhaninin değeri (m)',v:'100'},{id:'say',l:'Ondan sonra sayılan ince münhani',v:'3'},
+{id:'yar',l:'Sonra yardımcı münhani var mı?',t:'s',w:6,o:[['yok','Yok'],['uzun','Var: uzun kesik çizgi'],['kisa','Var: kısa kesik çizgi']],v:'yok'}],
+calc(v){const a=interval(v),ana=v.n('ana'),say=v.n('say'),sg=v.s('tur')==='tepe'?1:-1,ys=v.s('yar');
+ if(!(a>0))return E('Münhani aralığını yaz.');if(!Number.isFinite(ana))return E('Kalın münhaninin değerini yaz.');if(!(say>=0&&Number.isInteger(say)))return E('İnce münhani sayısı 0 ya da pozitif tam sayı olmalı.');
+ const y=ys==='uzun'?a/2:ys==='kisa'?a/4:0,h1=ana+sg*say*a,h2=h1+sg*y,half=(y||a)/2,r=h2+sg*half,op=sg>0?'+':'−';
+ const st=[`İnce münhaniler: ${say} × ${fmt(a,1)} m = ${fmt(say*a,1)} m`,`${fmt(ana,1)} ${op} ${fmt(say*a,1)} = ${fmt(h1,1)} m`];
+ if(y)st.push(`Yardımcı münhani (${ys==='uzun'?'uzun kesik':'kısa kesik'}): ${fmt(h1,1)} ${op} ${fmt(y,2)} = ${fmt(h2,2)} m`);
+ st.push(`${sg>0?'Zirve':'Dip'} için aralığın yarısı: ${fmt(h2,2)} ${op} ${fmt(half,2)} = ${fmt(r,2)} m`);
+ return{cap:sg>0?'Zirvenin rakımı':'Çukurun dibinin rakımı',big:fmt(r,2)+' <small>m</small>',sub:Number.isInteger(r)?'':`Yuvarlanmış: ${fmt(Math.round(r),0)} m`,rows:[['İnce münhani aralığı',fmt(a,1)+' m'],['Yardımcı münhani aralığı',`${fmt(a/2,2)} m (uzun) · ${fmt(a/4,2)} m (kısa)`]],steps:st}}},
+{tab:'rakim',id:'oran',title:'İki münhani arasındaki noktanın rakımı',hint:'Orantı metodu: aralık × (noktanın alçak münhaniye uzaklığı ÷ iki münhani arası). Acele usul de aşağıda.',
+f:[...SCF,{id:'alt',l:'Alçak münhaninin değeri (m)',v:'50',w:6},{id:'D',l:'İki münhani arası (mm)',v:'12'},{id:'d',l:'Noktanın alçak münhaniye uzaklığı (mm)',v:'3'}],
+calc(v){const a=interval(v),alt=v.n('alt'),D=v.n('D'),d=v.n('d');if(!(a>0))return E('Münhani aralığını yaz.');if(!Number.isFinite(alt))return E('Alçak münhaninin değerini yaz.');
+ if(!(D>0)||!(d>=0))return E('Mesafeleri mm olarak yaz.');if(d>D)return E('Noktanın uzaklığı iki münhani arasından büyük olamaz.');
+ const x=a*d/D,r=alt+x,q=d/D,ac=q<=.25?alt:q>=.75?alt+a:alt+a/2;
+ return{cap:'Noktanın rakımı (orantı)',big:fmt(r,2)+' <small>m</small>',rows:[['Acele usul (4 eşit parça)',fmt(ac,1)+' m'],['Noktanın konumu',`aralığın %${fmt(q*100,0)}’i`]],
+  steps:[`${fmt(a,1)} m yükseklik farkı ${fmt(D,1)} mm ise ${fmt(d,1)} mm → X`,`X = ${fmt(d,1)} × ${fmt(a,1)} ÷ ${fmt(D,1)} = ${fmt(x,2)} m`,`Rakım = ${fmt(alt,1)} + ${fmt(x,2)} = ${fmt(r,2)} m`,`Acele usul: nokta ${q<=.25?'alçak münhaniye yakın':q>=.75?'yüksek münhaniye yakın':'iki münhaninin ortasında'} → ${fmt(ac,1)} m`],fig:figRatio(alt,a,d,D)}}},
+{tab:'rakim',id:'egim',title:'İki nokta arası eğim',hint:'Rakımları yukarıdaki araçlarla bul; yatay mesafeyi haritadan mm olarak da verebilirsin.',
+f:[{id:'h1',l:'Başlangıç rakımı (m)',v:'135'},{id:'h2',l:'Bitiş rakımı (m)',v:'52,5'},{id:'mt',l:'Yatay mesafe nasıl?',t:'s',w:6,o:[['mm','Haritada ölçtüm (mm)'],['m','Arazi mesafesi (m)']],v:'mm'},{id:'d',l:'Yatay mesafe',v:'36'},{id:'n',l:'Ölçek 1 :',v:'25000',show:v=>v.s('mt')==='mm'}],
+calc(v){const h1=v.n('h1'),h2=v.n('h2'),mm=v.s('mt')==='mm',n=v.n('n'),D=mm?v.n('d')*n/1000:v.n('d');
+ if(![h1,h2].every(Number.isFinite))return E('İki rakamı da metre olarak yaz.');if(!(D>0))return E('Yatay mesafe sıfırdan büyük olmalı.');
+ const dh=h2-h1,pct=dh/D*100,dg=deg(Math.atan(dh/D));
+ return{cap:dh>=0?'Yokuş yukarı eğim':'Yokuş aşağı eğim',big:'%'+fmt(Math.abs(pct),1),rows:[['Derece',fmt(Math.abs(dg),2)+'°'],['Milyem',fmt(Math.abs(toMil(dg)),0)],['Oran',dh?'1 : '+fmt(Math.abs(D/dh),1):'düz'],['Eğik mesafe',lenM(Math.hypot(D,dh))]],
+  steps:[...(mm?[`Yatay mesafe = ${fmt(v.n('d'),1)} mm × ${fmt(n,0)} = ${fmt(D,1)} m`]:[]),`Yükseklik farkı = ${fmt(h2,1)} − ${fmt(h1,1)} = ${fmt(dh,1)} m`,`Eğim = ${fmt(dh,1)} ÷ ${fmt(D,1)} × 100 = %${fmt(pct,2)}`]}}},
+
+/* COĞRAFİ */
+{tab:'cografi',id:'oku',title:'Haritadan coğrafi koordinat okuma',hint:'Köşe koordinatına tam dakikaları ekle; kalan mm’yi orantıyla saniyeye çevir.',
+f:[{h:'Pafta sol alt köşesi'},{id:'ad',l:'Enlem °',v:'40',w:2},{id:'am',l:'′',v:'45',w:2},{id:'as',l:'″',v:'0',w:2},{id:'od',l:'Boylam °',v:'29',w:2},{id:'om',l:'′',v:'15',w:2},{id:'os',l:'″',v:'0',w:2},
+{h:'Köşeden son dakika çizgisine kadar'},{id:'ek',l:'Enlemde (dakika)',v:'6'},{id:'bk',l:'Boylamda (dakika)',v:'0'},
+{h:'1′ dakika çizgisinin uzunluğu'},{id:'le',l:'Enlemde (mm)',v:'74'},{id:'lb',l:'Boylamda (mm)',v:'56,5'},
+{h:'Son dakika çizgisinden noktaya ölçülen'},{id:'me',l:'Enlemde (mm)',v:'39'},{id:'mb',l:'Boylamda (mm)',v:'49'}],
+calc(v){const c=(a,b,s)=>a+b/60+s/3600,la0=c(v.n('ad'),v.n('am')||0,v.n('as')||0),lo0=c(v.n('od'),v.n('om')||0,v.n('os')||0),ek=v.n('ek'),bk=v.n('bk'),le=v.n('le'),lb=v.n('lb'),me=v.n('me'),mb=v.n('mb');
+ if(![la0,lo0].every(Number.isFinite))return E('Köşe koordinatını yaz.');if(!(ek>=0)||!(bk>=0))return E('Dakika sayılarını yaz (yoksa 0).');if(!(le>0)||!(lb>0))return E('1′ çizgi uzunluklarını mm olarak yaz.');
+ if(!(me>=0&&me<=le)||!(mb>=0&&mb<=lb))return E('Ölçülen mm, 1′ çizgi uzunluğundan büyük olamaz.');
+ const se=me*60/le,sb=mb*60/lb,lat=la0+ek/60+Math.round(se)/3600,lon=lo0+bk/60+Math.round(sb)/3600,txt=`${fDMS(lat,0,['K','G'])}, ${fDMS(lon,0,['D','B'])}`;
+ return{cap:'Noktanın coğrafi koordinatı',big:`${fDMS(lat,0,['K','G'])}<br>${fDMS(lon,0,['D','B'])}`,copy:txt,rows:[['Saniyeler (yuvarlanmadan)',`${fmt(se,1)}″ · ${fmt(sb,1)}″`],['Ondalık derece',`${(la0+ek/60+se/3600).toFixed(5)}, ${(lo0+bk/60+sb/3600).toFixed(5)}`]],
+  steps:[`Enlemde ${fmt(le,1)} mm 60″ ise ${fmt(me,1)} mm → ${fmt(me,1)} × 60 ÷ ${fmt(le,1)} = ${fmt(se,1)}″ ≈ ${Math.round(se)}″`,`Boylamda ${fmt(lb,1)} mm 60″ ise ${fmt(mb,1)} mm → ${fmt(mb,1)} × 60 ÷ ${fmt(lb,1)} = ${fmt(sb,1)}″ ≈ ${Math.round(sb)}″`,
+  `Enlem: ${fDMS(la0)} + ${p2(ek)}′ 00″ + ${Math.round(se)}″ = ${fDMS(lat)}`,`Boylam: ${fDMS(lo0)} + ${p2(bk)}′ 00″ + ${Math.round(sb)}″ = ${fDMS(lon)}`]}}},
+{tab:'cografi',id:'gec',title:'Coğrafi koordinatı haritaya geçirme',hint:'Saniyeyi mm’ye çevir; ilgili dakika çizgisinden cetvelle ölçüp işaretle.',
+f:[{id:'la',l:'Enlem (° ′ ″)',v:'40 45 48'},{id:'lo',l:'Boylam (° ′ ″)',v:'29 21 57'},{id:'le',l:'Enlemde 1′ (mm)',v:'74'},{id:'lb',l:'Boylamda 1′ (mm)',v:'56,5'}],
+calc(v){const la=parseDeg(v.s('la')),lo=parseDeg(v.s('lo')),le=v.n('le'),lb=v.n('lb');if(![la,lo].every(Number.isFinite))return E('Enlem ve boylamı “40 45 48” biçiminde yaz.');if(!(le>0)||!(lb>0))return E('1′ çizgi uzunluklarını yaz.');
+ const A=dmsParts(la,1),B=dmsParts(lo,1),y=A.s*le/60,x=B.s*lb/60;
+ return{cap:'Dakika çizgilerinden ölçülecek mesafe',big:`↑ ${fmt(y,1)} <small>mm</small> · → ${fmt(x,1)} <small>mm</small>`,rows:[['Enlem',`${A.d}° ${p2(A.m)}′ çizgisinden ${fmt(y,1)} mm yukarı`],['Boylam',`${B.d}° ${p2(B.m)}′ çizgisinden ${fmt(x,1)} mm sağa`]],
+  steps:[`60″ ${fmt(le,1)} mm ederse ${fmt(A.s,1)}″ → ${fmt(A.s,1)} × ${fmt(le,1)} ÷ 60 = ${fmt(y,1)} mm`,`60″ ${fmt(lb,1)} mm ederse ${fmt(B.s,1)}″ → ${fmt(B.s,1)} × ${fmt(lb,1)} ÷ 60 = ${fmt(x,1)} mm`,'İşaretlenen noktalardan çıkan dikmelerin kesiştiği yer aranan noktadır.']}}},
+{tab:'cografi',id:'saat',title:'İki nokta arasındaki yerel saat farkı',hint:'Her 1° boylam farkı 4 dakika yerel saat farkı demektir.',
+f:[{id:'a',l:'A noktasının boylamı (° ′)',v:'28 58'},{id:'b',l:'B noktasının boylamı (° ′)',v:'32 51'}],
+calc(v){const a=parseDeg(v.s('a')),b=parseDeg(v.s('b'));if(![a,b].every(Number.isFinite))return E('İki boylamı “28 58” biçiminde yaz; batı boylamlarının sonuna B ekle.');
+ const d=b-a,min=Math.abs(d)*4,mm=Math.floor(min),ss=Math.round((min-mm)*60);
+ return{cap:'Yerel saat farkı',big:`${mm} <small>dk</small> ${ss} <small>sn</small>`,sub:d?`Güneş ${d>0?'B':'A'} noktasında daha önce doğar; ${d>0?'B':'A'} noktasının yerel saati ileridedir.`:'Aynı boylam: fark yok.',rows:[['Boylam farkı',fDM(Math.abs(d),1)]],
+  steps:[`Boylam farkı = ${fDM(Math.abs(d),1)} = ${fmt(Math.abs(d),4)}°`,`${fmt(Math.abs(d),4)} × 4 dk = ${fmt(min,2)} dk`]}}},
+
+/* GRID */
+{tab:'grid',id:'pm',title:'Plan müşiri ile grid koordinatı',hint:'Önce sağa, sonra yukarı okunur. 1/25 000’de plan müşirinde iki ince çizgi arası 20 m’dir.',
+f:[{h:'Noktanın bulunduğu 1000 m’lik kare'},{id:'gs',l:'Sağa değer (soldaki düşey çizgi)',v:'91'},{id:'gy',l:'Yukarı değer (alttaki yatay çizgi)',v:'15'},
+{h:'Plan müşiriyle ölçülen'},{id:'ms',l:'Sağa (m)',v:'820'},{id:'my',l:'Yukarı (m)',v:'60'},
+{h:'Pafta sol alt köşesindeki tam değerler'},{id:'ks',l:'Sağa (örn. 690000)',v:'690000'},{id:'ky',l:'Yukarı (örn. 4514000)',v:'4514000'},{id:'z',l:'UTM dilimi (grid notundan)',v:'35',w:6}],
+calc(v){const gs=v.n('gs'),gy=v.n('gy'),ms=v.n('ms'),my=v.n('my'),ks=v.n('ks'),ky=v.n('ky'),z=v.n('z');
+ if(![gs,gy].every(x=>Number.isInteger(x)&&x>=0&&x<100))return E('Grid çizgi değerleri 0–99 arası iki haneli sayı olmalı (büyük yazılı rakamlar).');if(![ms,my].every(x=>x>=0&&x<1000))return E('Plan müşiri ölçümleri 0 ile 999 m arasında olmalı.');
+ const e5=gs*1000+ms,n5=gy*1000+my,s4=short(e5,n5,2),s10=short(e5,n5,5);let rows=[['1000 m doğruluk',s4],['100 m doğruluk',short(e5,n5,3)],['10 m doğruluk',short(e5,n5,4)],['1 m doğruluk',s10]],st=[`Kare: sağa ${p2(gs)}, yukarı ${p2(gy)} → ${s4}`,`Sağa: ${p2(gs)} + ${String(Math.floor(ms)).padStart(3,'0')} = ${trd(e5,5)}`,`Yukarı: ${p2(gy)} + ${String(Math.floor(my)).padStart(3,'0')} = ${trd(n5,5)}`,`Kısa koordinat: ${s10}`];
+ if(ks>0&&ky>0){const Ef=full(ks,e5),Nf=full(ky,n5);rows.push(['Tam koordinat',`${Ef} ${Nf}`]);st.push(`Sağa değerin önüne köşedeki küçük rakam (${Math.floor(Ef/1e5)}): ${Ef}`,`Yukarı değerin önüne köşedeki küçük rakamlar (${Math.floor(Nf/1e5)}): ${Nf}`);
+  if(z>=1&&z<=60){const g=utmI(z,'K',Ef,Nf,WGS);if(Ef>1e5&&Ef<9e5)rows.push(['MGRS bildirimi (100 m)',mgrs(z,g.lat,Ef,Nf,3)]);}}
+ return{cap:'Grid kısa koordinatı (1 m doğrulukla)',big:s10,copy:s10,rows,steps:st,fig:figSquare(gs,gy,ms,my)}}},
+{tab:'grid',id:'coz',title:'Kısa koordinatı veya MGRS bildirimini çöz',hint:'9115, 918150, 9182015060, PF975229 ya da 35TPF975229 gibi yaz.',
+f:[{id:'t',l:'Bildirim',v:'35TPF975229',w:6},{id:'z',l:'UTM dilimi',v:'35'},{id:'dt',l:'Grid türü',t:'s',o:[['ed50','Siyah grid (ED50)'],['wgs','Kırmızı grid (WGS84)']],v:'ed50'},
+{h:'Harf yoksa: pafta sol alt köşe tam değerleri'},{id:'ks',l:'Sağa',v:'690000'},{id:'ky',l:'Yukarı',v:'4514000'}],
+calc(v){const p=parsePt(v.s('t'));if(!p||p.abs)return E('Bildirimi rakamlarla (çift sayıda hane) ya da harflerle yaz: 9182015060, PF975229, 35TPF975229.');
+ const z=p.zone||v.n('z'),ks=v.n('ks'),ky=v.n('ky'),el=v.s('dt')==='wgs'?WGS:INT;if(!(z>=1&&z<=60))return E('UTM dilimini yaz (Türkiye: 35–38).');
+ let Ef,Nf,st=[];
+ if(p.letters){const ci=COLS[(z-1)%3].indexOf(p.letters[0]),ri0=ROWL.indexOf(p.letters[1]);if(ci<0||ri0<0)return E(`${z}. dilim için “${p.letters}” geçerli bir 100 km kare harfi değil.`);
+  Ef=(ci+1)*1e5+p.e5;Nf=((ri0-(z%2?0:5)+20)%20)*1e5+p.n5;const ref=p.band?utmF(-80+8*BANDS.indexOf(p.band)+4,(z-1)*6-177,WGS,z).N:(ky>0?ky:4.4e6);Nf+=2e6*Math.max(0,Math.round((ref-Nf)/2e6));
+  st.push(`${p.letters}: ${z}. dilimde sağa ${ci+1}00 000 m’lik, yukarı ${Math.floor(Nf/1e5)}00 000 m’lik kare`,`Sağa ${trd(p.e5,p.k)}… → ${Ef}`,`Yukarı ${trd(p.n5,p.k)}… → ${Nf}`)}
+ else{if(!(ks>0&&ky>0))return E('Harfsiz bildirimde tam koordinat için pafta köşe değerlerini yaz.');Ef=full(ks,p.e5);Nf=full(ky,p.n5);st.push(`İlk ${p.k} hane sağa: ${trd(p.e5,p.k)} → ${trd(p.e5,5)} m`,`Son ${p.k} hane yukarı: ${trd(p.n5,p.k)} → ${trd(p.n5,5)} m`,`Köşedeki küçük rakamlar eklenir: ${Ef} ${Nf}`)}
+ const c=p.p>1?p.p/2:0,g=utmI(z,'K',Ef+c,Nf+c,el),w=el===INT?ed2wgs(g.lat,g.lon):g;
+ const rows=[['Doğruluk',PREC[p.k]],['Kısa koordinat',short(Ef,Nf,p.k)],['MGRS',Ef>1e5&&Ef<9e5?mgrs(z,g.lat,Ef,Nf,p.k):'—'],[el===INT?'Coğrafi (ED50)':'Coğrafi (WGS84)',`${fDMS(g.lat,1,['K','G'])}<br>${fDMS(g.lon,1,['D','B'])}`]];
+ if(el===INT)rows.push(['Coğrafi (WGS84, GPS)',`${w.lat.toFixed(5)}, ${w.lon.toFixed(5)}`]);
+ if(c)st.push(`Coğrafi koordinat ${PREC[p.k]}’lik karenin merkezi için verildi.`);
+ return{cap:'Tam grid koordinatı (sağa, yukarı)',big:`${Ef} ${Nf}`,copy:`${Ef} ${Nf}`,rows,steps:st}}},
+{tab:'grid',id:'iki',title:'İki nokta arası mesafe ve GİA',hint:'Noktaları kısa koordinat (9722, 918150…) ya da tam koordinat (691820 4515060) olarak yaz. Kısa koordinatta kare merkezi alınır.',
+f:[{id:'a',l:'Bulunulan nokta (A)',v:'9722'},{id:'b',l:'Hedef nokta (B)',v:'9625'},{id:'isa',l:'İSA (milyem, doğu +)',v:'40',w:6}],
+calc(v){const A=parsePt(v.s('a')),B=parsePt(v.s('b')),isa=v.n('isa')||0;if(!A||!B)return E('İki noktayı da kısa ya da tam koordinat olarak yaz.');
+ const ca=A.p>1?A.p/2:0,cb=B.p>1?B.p/2:0,dE=A.abs&&B.abs?B.E-A.E:wrap((B.e5+cb)-(A.e5+ca)),dN=A.abs&&B.abs?B.N-A.N:wrap((B.n5+cb)-(A.n5+ca)),d=Math.hypot(dE,dN);
+ if(!d)return E('İki nokta aynı.');const gd=n360(deg(Math.atan2(dE,dN))),gm=toMil(gd),mi=n64(gm-isa);
+ return{cap:'A’dan B’ye mesafe',big:lenM(d),rows:[['GİA (A → B)',`${fmt(gm,0)} milyem · ${fmt(gd,1)}°`],['Geri GİA (B → A)',`${fmt(n64(gm+3200),0)} milyem`],['MİA (pusulada)',`${fmt(mi,0)} milyem`],['Geri MİA',`${fmt(n64(mi+3200),0)} milyem`],['ΔSağa · ΔYukarı',`${fmt(dE,0)} m · ${fmt(dN,0)} m`]],
+  steps:[`ΔSağa = ${fmt(dE,0)} m, ΔYukarı = ${fmt(dN,0)} m`,`Mesafe = √(${fmt(dE,0)}² + ${fmt(dN,0)}²) = ${fmt(d,0)} m`,`GİA = ${fmt(gd,2)}° × 17,78 = ${fmt(gm,0)} milyem`,`MİA = GİA − İSA = ${fmt(gm,0)} − ${fmt(isa,0)} = ${fmt(mi,0)} milyem`]}}},
+{tab:'grid',id:'kut',title:'GİA ve mesafeyle yeni nokta bulma',hint:'Bilinen noktadan verilen istikamette ve uzaklıkta varılacak noktanın koordinatı.',
+f:[{id:'a',l:'Bilinen nokta',v:'9182015060',w:6},{id:'aci',l:'GİA',v:'4040'},{id:'u',l:'Birim',t:'s',o:AU,v:'mil'},{id:'d',l:'Mesafe (m)',v:'1500',w:6}],
+calc(v){const A=parsePt(v.s('a')),u=v.s('u'),g=ang(v.s('aci'),u),d=v.n('d');if(!A)return E('Bilinen noktayı kısa ya da tam koordinat olarak yaz.');if(!Number.isFinite(g))return E('GİA değerini yaz.');if(!(d>=0))return E('Mesafeyi metre olarak yaz.');
+ const c=A.p>1?A.p/2:0,dE=d*Math.sin(rad(g)),dN=d*Math.cos(rad(g)),E2=(A.abs?A.E:A.e5+c)+dE,N2=(A.abs?A.N:A.n5+c)+dN,s=short(E2,N2,5);
+ return{cap:'Varılacak noktanın kısa koordinatı',big:s,copy:s,rows:[...(A.abs?[['Tam koordinat',`${Math.round(E2)} ${Math.round(N2)}`]]:[]),['100 m doğrulukla',short(E2,N2,3)],['ΔSağa · ΔYukarı',`${fmt(dE,0)} m · ${fmt(dN,0)} m`]],
+  steps:[`ΔSağa = ${fmt(d,0)} × sin(${showAng(g,u)}) = ${fmt(dE,1)} m`,`ΔYukarı = ${fmt(d,0)} × cos(${showAng(g,u)}) = ${fmt(dN,1)} m`,'Farklar bilinen noktanın sağa ve yukarı değerlerine eklenir.']}}},
+{tab:'grid',id:'utm',title:'Coğrafi ↔ grid (UTM) ↔ MGRS',hint:'Siyah rakamlı grid ED50 (Uluslararası sferoid), kırmızı rakamlı kısa hatlar WGS84’tür. GPS WGS84 verir.',
+f:[{id:'mode',l:'Bildiğin',t:'s',o:[['geo','Coğrafi koordinat'],['utm','Grid (UTM) koordinatı']],v:'geo'},{id:'dt',l:'Bu koordinatın datumu',t:'s',o:[['ed50','ED50 (siyah grid)'],['wgs','WGS84 (kırmızı grid, GPS)']],v:'ed50'},
+{id:'la',l:'Enlem (° ′ ″ ya da ondalık)',v:'40 51 32',show:v=>v.s('mode')==='geo'},{id:'lo',l:'Boylam',v:'29 15 52',show:v=>v.s('mode')==='geo'},
+{id:'z',l:'Dilim',v:'35',w:2,show:v=>v.s('mode')==='utm'},{id:'E',l:'Sağa (m)',v:'691820',w:2,show:v=>v.s('mode')==='utm'},{id:'N',l:'Yukarı (m)',v:'4515060',w:2,show:v=>v.s('mode')==='utm'}],
+calc(v){const ed=v.s('dt')==='ed50';let la,lo,zf;
+ if(v.s('mode')==='geo'){la=parseDeg(v.s('la'));lo=parseDeg(v.s('lo'));if(!(Math.abs(la)<=84)||!(Math.abs(lo)<=180))return E('Enlem ve boylamı “40 51 32” ya da 40.8589 biçiminde yaz.')}
+ else{zf=v.n('z');const e=v.n('E'),n=v.n('N');if(!(zf>=1&&zf<=60))return E('Dilim 1–60 arasında olmalı.');if(!(e>1e5&&e<9e5)||!(n>0))return E('Sağa değer 6 haneli, yukarı değer 7 haneli tam koordinat olmalı.');({lat:la,lon:lo}=utmI(zf,'K',e,n,ed?INT:WGS))}
+ const W=ed?ed2wgs(la,lo):{lat:la,lon:lo},D=ed?{lat:la,lon:lo}:wgs2ed(la,lo),z=zf||Math.min(60,Math.floor((W.lon+180)/6)+1),ue=utmF(D.lat,D.lon,INT,z),uw=utmF(W.lat,W.lon,WGS,z),r=n=>Math.round(n);
+ const geo=v.s('mode')==='geo',main=ed?ue:uw;
+ return{cap:geo?`Grid tam koordinatı (${ed?'ED50':'WGS84'}, ${z}. dilim)`:`Coğrafi koordinat (${ed?'ED50':'WGS84'})`,big:geo?`${r(main.E)} ${r(main.N)}`:`${fDMS(la,1,['K','G'])}<br>${fDMS(lo,1,['D','B'])}`,copy:geo?`${r(main.E)} ${r(main.N)}`:`${fDMS(la,1,['K','G'])} ${fDMS(lo,1,['D','B'])}`,
+  rows:[['Siyah grid (ED50)',`${r(ue.E)} ${r(ue.N)}`],['Kırmızı grid (WGS84)',`${r(uw.E)} ${r(uw.N)}`],['MGRS (WGS84, 10 m)',mgrs(z,W.lat,uw.E,uw.N,4)],['Coğrafi ED50',`${fDMS(D.lat,1,['K','G'])} · ${fDMS(D.lon,1,['D','B'])}`],['Coğrafi WGS84',`${W.lat.toFixed(6)}, ${W.lon.toFixed(6)}`],['İki grid arası fark',`${fmt(uw.E-ue.E,0)} m sağa, ${fmt(uw.N-ue.N,0)} m yukarı`]],
+  steps:[`Dilim: ${z} (orta meridyen ${(z-1)*6-177}°)`,`Grid bölge işareti: ${z}${band(W.lat)}`]}}},
+
+/* AÇILAR */
+{tab:'aci',id:'cev',title:'Açı birimi çevirici',hint:'Tam daire 360° = 6400 milyem. 1° = 17,78 milyem. Dereceyi “1 45” ya da “1°45′” diye yazabilirsin.',
+f:[{id:'x',l:'Açı',v:'1°45′'},{id:'u',l:'Birim',t:'s',o:AU,v:'deg'}],
+calc(v){const u=v.s('u'),d=ang(v.s('x'),u);if(!Number.isFinite(d))return E('Açıyı yaz.');const m=toMil(d);
+ return{cap:u==='mil'?'Derece karşılığı':'Milyem karşılığı',big:u==='mil'?fDMS(d,0):fmt(m,1)+' <small>milyem</small>',rows:[['Ondalık derece',fmt(d,4)+'°'],['Derece-dakika',fDM(d,1)],['Milyem',fmt(m,2)],['Bilezik çıtı (3°)',fmt(d/3,2)]],
+  steps:[u==='mil'?`${fmt(num(v.s('x')),2)} × 360 ÷ 6400 = ${fmt(d,4)}°`:`${fDM(d,1)} = ${fmt(d,4)}°`,`${fmt(d,4)}° × 6400 ÷ 360 = ${fmt(m,2)} milyem`]}}},
+{tab:'aci',id:'geri',title:'Geri istikamet açısı',hint:'Geri İA = İA ± 3200 milyem (180°). Sonuç 0 ile 6400 arasında kalacak şekilde artı ya da eksi alınır.',
+f:[{id:'x',l:'İstikamet açısı',v:'1650'},{id:'u',l:'Birim',t:'s',o:AU,v:'mil'}],
+calc(v){const u=v.s('u'),mil=u==='mil';const x=mil?num(v.s('x')):parseDeg(v.s('x'));if(!Number.isFinite(x))return E('Açıyı yaz.');
+ const H=mil?3200:180,F=mil?6400:360,r=x<H?x+H:x-H;
+ return{cap:'Geri istikamet açısı',big:fmt(((r%F)+F)%F,mil?0:2)+(mil?' <small>milyem</small>':'°'),rows:[['Diğer birimde',mil?fmt(toDeg(r),2)+'°':fmt(toMil(r),0)+' milyem']],steps:[`${fmt(x,2)} ${x<H?'+':'−'} ${H} = ${fmt(r,2)}${mil?' milyem':'°'}`]}}},
+{tab:'aci',id:'isa',title:'İSA’nı bulunulan yıla göre hesaplama',hint:'Sapma diyagramındaki İSA’ya, aradan geçen yıl × yıllık değişimi ekle (ya da çıkar).',
+f:[{id:'i0',l:'Diyagramdaki İSA (° ′)',v:'1°45′'},{id:'yon',l:'Yönü',t:'s',o:[['1','Doğu'],['-1','Batı']],v:'1'},{id:'y0',l:'Diyagramın yılı',v:'1990'},{id:'y',l:'Hesaplanacak yıl',v:'2004'},{id:'dg',l:'Yıllık değişim (′)',v:'2'},{id:'ds',l:'Değişim',t:'s',o:[['1','Artı'],['-1','Eksi']],v:'1'}],
+calc(v){const i0=Math.abs(parseDeg(v.s('i0')))*v.n('yon'),y0=v.n('y0'),y=v.n('y'),dg=v.n('dg'),ds=v.n('ds');if(!Number.isFinite(i0))return E('Diyagramdaki İSA değerini yaz.');if(![y0,y,dg].every(Number.isFinite))return E('Yılları ve yıllık değişimi yaz.');
+ const n=y-y0,ch=n*dg*ds/60,r=i0+ch,m=toMil(r);
+ return{cap:`${String(y)} yılı için İSA`,big:`${fDM(Math.abs(r))} <small>${r<0?'batı':'doğu'}</small>`,sub:`= ${fmt(Math.abs(m),1)} milyem`,rows:[['Yuvarlanmış milyem',fmt(Math.round(Math.abs(m)),0)],['Ondalık derece',fmt(r,4)+'°']],
+  steps:[`${String(y)} − ${String(y0)} = ${fmt(n,0)} yıl`,`${fmt(n,0)} yıl × ${fmt(dg,1)}′ = ${fmt(Math.abs(n*dg),1)}′ ${ds*n>=0?'artı':'eksi'}`,`${fDM(i0)} ${ds*n>=0?'+':'−'} ${fmt(Math.abs(n*dg),1)}′ = ${fDM(r)}${r<0?' (batı)':' (doğu)'}`,`${fDM(Math.abs(r))} = ${fmt(Math.abs(r),4)}° × 17,78 = ${fmt(Math.abs(m),1)} milyem`]}}},
+{tab:'aci',id:'p',title:'P noktası ile haritayı yönüne koyma',hint:'Bulunulan yılın İSA’sını hesapla, pusula sapma göstergesinde işaretle, P noktasıyla birleştir; pusulayı bu çizgiye teğet koy.',
+f:[{h:'Sapma diyagramındaki değerler'},{id:'i0',l:'İSA (° ′)',v:'1°45′'},{id:'yon',l:'Yönü',t:'s',o:[['1','Doğu'],['-1','Batı']],v:'1'},{id:'y0',l:'Diyagramın yılı',v:'1990'},{id:'dg',l:'Yıllık değişim (′)',v:'2'},{id:'ds',l:'Değişim',t:'s',o:[['1','Artı'],['-1','Eksi']],v:'1'},{id:'y',l:'Bulunulan yıl',v:String(new Date().getFullYear())},
+{h:'İsteğe bağlı'},{id:'L',l:'P noktasından göstergeye uzaklık (mm)',v:'',w:6}],
+calc(v){const i0=Math.abs(parseDeg(v.s('i0')))*v.n('yon'),y0=v.n('y0'),y=v.n('y'),dg=v.n('dg'),ds=v.n('ds'),L=v.n('L');
+ if(!Number.isFinite(i0))return E('Sapma diyagramındaki İSA değerini yaz.');if(![y0,y,dg].every(Number.isFinite))return E('Yılları ve yıllık değişimi yaz.');
+ const n=y-y0,r=i0+n*dg*ds/60,a=Math.abs(r),m=toMil(a),d0=Math.floor(a),east=r>=0;
+ const rows=[['Göstergede işaretlenecek yer',`${d0}° ile ${d0+1}° arası, ${d0}°’den ${fmt((a-d0)*60,0)}′ ileride (aralığın %${fmt((a-d0)*100,0)}’i)`],
+  ['Ondalık derece',fmt(a,2)+'°'],
+  ['Pusula ve grid çizgisiyle yönüne koyarken',`Fosforlu ok siyah gösterge çizgisinin ${east?'sağında':'solunda'}, ${fmt(m,0)} milyem fark`],
+  ['Grid kuzeyine bakarken pusulada okunan',`${fmt(n64(east?-m:m),0)} milyem · ${fmt(n360(east?-a:a),2)}°`]];
+ if(L>0)rows.splice(1,0,['0° çizgisinden uzaklık',`${fmt(L*Math.tan(rad(a)),1)} mm ${east?'sağa':'sola'}`]);
+ const st=[`${String(y)} − ${String(y0)} = ${fmt(n,0)} yıl; ${fmt(n,0)} × ${fmt(dg,1)}′ = ${fmt(Math.abs(n*dg),1)}′ ${ds*n>=0?'artı':'eksi'}`,`İSA = ${fDM(i0)} ${ds*n>=0?'+':'−'} ${fmt(Math.abs(n*dg),1)}′ = ${fDM(r)} → ${fDM(a)} ${east?'doğu':'batı'} (${fmt(a,2)}°)`,
+  `Bu değer pusula sapma göstergesinde işaretlenir: ${d0}° çizgisinden sonra ${fmt((a-d0)*60,0)}′.`,...(L>0?[`P’den göstergeye ${fmt(L,0)} mm ise 0° çizgisinden ${fmt(L,0)} × tan ${fmt(a,2)}° = ${fmt(L*Math.tan(rad(a)),1)} mm ${east?'sağa':'sola'} ölçülür.`]:[]),
+  'P noktası ile işaretlenen nokta çizgiyle birleştirilir.','Pusula, ölçekli kenarı bu çizgiye teğet olacak şekilde konur.','Kuzey oku sabit çizgiye çakışıncaya kadar harita döndürülür; harita yönüne konmuş olur.'];
+ const warn=!east?'Göstergede batı tarafı yoksa haritayı pusula ve grid çizgisiyle yönüne koy.':a>5?'Değer 5°’lik göstergenin dışında kalıyor; pusula ve grid çizgisiyle yönüne koy.':`= ${fmt(m,1)} milyem`;
+ return{cap:`${String(y)} yılı İSA — göstergede işaretlenecek değer`,big:`${fDM(a)} <small>${east?'doğu':'batı'}</small>`,sub:warn,rows,steps:st,fig:figP(r)}}},
+{tab:'aci',id:'gm',title:'GİA ↔ MİA ↔ CİA çevirme',hint:'MİA = GİA − İSA (haritadan pusulaya). GİA = MİA + İSA (pusuladan haritaya). İSA ve YA doğuya ise artı yaz.',
+f:[{id:'x',l:'Bilinen açı',v:'5900'},{id:'tip',l:'Bu açı',t:'s',o:[['gia','GİA (haritadan)'],['mia','MİA (pusuladan)'],['cia','CİA (gerçek kuzeyden)']],v:'gia'},{id:'u',l:'Birim',t:'s',o:AU,v:'mil'},{id:'isa',l:'İSA (milyem)',v:'40'},{id:'ya',l:'YA (milyem)',v:'27',w:6}],
+calc(v){const u=v.s('u'),t=v.s('tip'),x=toMil(ang(v.s('x'),u)),isa=v.n('isa'),ya=v.n('ya')||0;if(!Number.isFinite(x))return E('Açıyı yaz.');if(!Number.isFinite(isa))return E('İSA değerini milyem olarak yaz.');
+ const gia=n64(t==='gia'?x:t==='mia'?x+isa:x-ya),mia=n64(gia-isa),cia=n64(gia+ya),tgt=t==='gia'?['MİA',mia]:['GİA',gia];
+ const st=t==='gia'?[`MİA = GİA − İSA = ${fmt(x,0)} − ${fmt(isa,0)} = ${fmt(mia,0)}`]:t==='mia'?[`GİA = MİA + İSA = ${fmt(x,0)} + ${fmt(isa,0)} = ${fmt(gia,0)}`]:[`GİA = CİA − YA = ${fmt(x,0)} − ${fmt(ya,0)} = ${fmt(gia,0)}`,`MİA = GİA − İSA = ${fmt(gia,0)} − ${fmt(isa,0)} = ${fmt(mia,0)}`];
+ return{cap:tgt[0],big:fmt(tgt[1],0)+' <small>milyem</small>',sub:`${fmt(toDeg(tgt[1]),2)}°`,rows:[['GİA',`${fmt(gia,0)} milyem · ${fmt(toDeg(gia),2)}°`],['MİA',`${fmt(mia,0)} milyem · ${fmt(toDeg(mia),2)}°`],['CİA',`${fmt(cia,0)} milyem · ${fmt(toDeg(cia),2)}°`],['DSA (YA + İSA)',`${fmt(ya+isa,0)} milyem`]],steps:st,fig:figSapma(toDeg(ya),toDeg(isa))}}},
+{tab:'aci',id:'ya',title:'Yaklaşma açısını (YA) koordinattan bulma',hint:'Gerçek kuzey ile grid kuzeyi arasındaki açı; dilimin orta meridyeninden uzaklaştıkça büyür.',
+f:[{id:'la',l:'Enlem',v:'40 48 45'},{id:'lo',l:'Boylam',v:'29 18 45'}],
+calc(v){const la=parseDeg(v.s('la')),lo=parseDeg(v.s('lo'));if(!(Math.abs(la)<=84)||!(Math.abs(lo)<=180))return E('Enlem ve boylamı yaz.');
+ const z=Math.min(60,Math.floor((lo+180)/6)+1),cm=(z-1)*6-177,dl=lo-cm,g=deg(Math.atan(Math.tan(rad(dl))*Math.sin(rad(la))));
+ return{cap:'Yaklaşma açısı (YA)',big:`${fDM(Math.abs(g))} <small>${g>=0?'doğu':'batı'}</small>`,sub:`= ${fmt(Math.abs(toMil(g)),1)} milyem`,rows:[['UTM dilimi',`${z} (orta meridyen ${cm}°)`],['Orta meridyenden uzaklık',fDM(dl,1)]],
+  steps:[`Boylam farkı = ${fmt(lo,4)}° − ${cm}° = ${fmt(dl,4)}°`,`YA = atan(tan ${fmt(dl,3)}° × sin ${fmt(la,3)}°) = ${fmt(g,4)}°`,`${fmt(g,4)}° × 17,78 = ${fmt(toMil(g),1)} milyem`]}}},
+{tab:'aci',id:'cit',title:'Gece yürüyüşü: çentikli bilezik',hint:'Bilezikte 120 çentik var; 1 çıt = 3° = 53,3 milyem.',
+f:[{id:'x',l:'Gidilecek istikamet açısı',v:'120'},{id:'u',l:'Birim',t:'s',o:AU,v:'deg'}],
+calc(v){const u=v.s('u'),d=n360(ang(v.s('x'),u));if(!Number.isFinite(d))return E('Açıyı yaz.');const c=d/3,ci=Math.floor(c+1e-9),rem=(c-ci)*3;
+ return{cap:'Bilezik çevirme',big:`Sola ${ci} <small>çıt</small>`,sub:rem>0.01?`Kalan ${fmt(rem,2)}° (${fmt(toMil(rem),0)} milyem) bilezikle ayarlanamaz; tahminle tamamla.`:`ya da sağa ${(120-ci)%120} çıt`,rows:[['Açı',`${fmt(d,2)}° · ${fmt(toMil(d),0)} milyem`],['Bir çıt','3° = 53,3 milyem']],
+  steps:[`${fmt(d,2)}° ÷ 3° = ${fmt(c,2)} çıt`,'Fosforlu çizgi siyah gösterge çizgisine gelince bilezik çıt sayısı kadar döndürülür.','Kuzey oku fosforlu çizginin altına gelene kadar vücutla dönülür; kapaktaki fosforlu noktalar doğrultusunda yürünür.']}}},
+{tab:'aci',id:'uzak',title:'Pusula için güvenli uzaklık',hint:'Metal cisimler ve elektrik hatları pusulayı saptırır.',
+f:[{id:'o',l:'Yakındaki cisim',t:'s',w:6,o:[['55','Yüksek gerilim hattı (55 m)'],['18','Ağır araç, tank, top (18 m)'],['10','Telefon-telgraf teli, tel örgü (10 m)'],['2','Makineli tüfek (2 m)'],['0.5','Tüfek, miğfer (0,5 m)']],v:'18'},{id:'d',l:'Cisme uzaklığın (m)',v:'12',w:6}],
+calc(v){const need=+v.s('o'),d=v.n('d');if(!(d>=0))return E('Uzaklığı metre olarak yaz.');const ok=d>=need;
+ return{cap:'Pusula ölçümü',big:`<span class="${ok?'good':'bad'}">${ok?'Güvenli':'Uzaklaş'}</span>`,sub:ok?`Gereken ${fmt(need,1)} m, sen ${fmt(d,1)} m uzaktasın.`:`En az ${fmt(need-d,1)} m daha uzaklaş (gereken ${fmt(need,1)} m).`,
+  rows:[['Yüksek gerilim hattı','55 m'],['Ağır araç, tank, top','18 m'],['Telefon-telgraf teli, tel örgü','10 m'],['Makineli tüfek','2 m'],['Tüfek, miğfer','0,5 m']],steps:[]}}},
+
+/* PAFTA */
+{tab:'pafta',id:'bil',title:'Ölçeğe göre harita bilgileri',hint:'Seçtiğin ölçeğe ait sınıf, pafta büyüklüğü, grid ve münhani aralıkları.',
+f:[{id:'sc',l:'Ölçek',t:'s',o:SC,v:'25000',w:6}],
+calc(v){const n=+v.s('sc'),m=MUN[n],I=INFO[n],[c1,c2]=sinif(n);
+ return{cap:'Haritada 1 cm',big:lenM(n/100),rows:[['Ölçeğe göre',c1],['Kullanma maksadına göre',c2],['Pafta büyüklüğü',I.paf],['Kapsam',I.ust],['Grid aralığı',I.grid],['İnce münhani',m[0]+' m'],['Kalın münhani',m[1]+' m'],['Yardımcı (uzun · kısa kesik)',`${fmt(m[2],1)} · ${fmt(m[3],1)} m`],['Haritada 1 mm',lenM(n/1000)],...(n===25000?[['Plan müşirinde iki ince çizgi','20 m']]:[])],steps:[]}}},
+{tab:'pafta',id:'paf',title:'Paftayı bölme ve noktanın paftasını bulma',hint:'1/100 000 pafta 4 adet 1/50 000 (a b / d c), her 1/50 000 de 4 adet 1/25 000 (1 2 / 4 3) paftaya bölünür.',
+f:[{id:'ad',l:'1/100 000 paftanın adı',v:'BURSA G22',w:6},{h:'1/100 000 paftanın sol alt köşesi'},{id:'la',l:'Enlem (° ′)',v:'40 30'},{id:'lo',l:'Boylam (° ′)',v:'29 00'},{h:'Paftası aranan nokta (isteğe bağlı)'},{id:'pa',l:'Enlem (° ′ ″)',v:'40 51 32'},{id:'po',l:'Boylam (° ′ ″)',v:'29 15 52'}],
+calc(v){const la=parseDeg(v.s('la')),lo=parseDeg(v.s('lo')),ad=esc(v.s('ad').trim()||'Pafta');if(![la,lo].every(Number.isFinite))return E('Köşe enlem ve boylamını yaz.');
+ const Q={a:[.25,0],b:[.25,.25],c:[0,.25],d:[0,0]},rng=(a,s)=>`${fDM(a)}–${fDM(a+s)}`;
+ const rows=Object.entries(Q).map(([k,[dy,dx]])=>[`${ad}-${k} (1/50 000)`,`${rng(la+dy,.25)} K<br>${rng(lo+dx,.25)} D`]);
+ const pa=parseDeg(v.s('pa')),po=parseDeg(v.s('po'));let cell=null,big=ad,cap='1/100 000 pafta',px=null,py=null,st=['1/100 000: 30′ × 30′ · 1/50 000: 15′ × 15′ · 1/25 000: 7′30″ × 7′30″'];
+ if(Number.isFinite(pa)&&Number.isFinite(po)){py=(pa-la)/.5;px=(po-lo)/.5;
+  if(px<0||px>=1||py<0||py>=1){rows.unshift(['Nokta','<span class="bad">Bu paftanın dışında</span>']);px=py=null}
+  else{const n=py>=.5,e=px>=.5,L=n?(e?'b':'a'):(e?'c':'d'),qy=(py%.5)>=.25,qx=(px%.5)>=.25,num=qy?(qx?2:1):(qx?3:4);cell=L+num;
+   const sla=la+(n?.25:0)+(qy?.125:0),slo=lo+(e?.25:0)+(qx?.125:0);big=`${ad}-${L}${num}`;cap='Noktanın 1/25 000 paftası';
+   rows.unshift(['1/25 000 pafta sınırı',`${fDMS(sla)}–${fDMS(sla+.125)} K<br>${fDMS(slo)}–${fDMS(slo+.125)} D`],['1/50 000 paftası',`${ad}-${L}`]);
+   st.push(`Nokta paftanın ${n?'kuzey':'güney'}-${e?'doğu':'batı'} çeyreğinde → ${L}`,`O çeyreğin ${qy?'kuzey':'güney'}-${qx?'doğu':'batı'} parçası → ${num}`)}}
+ return{cap,big,copy:big.replace(/&amp;/g,'&'),rows,steps:st,fig:figPafta(cell,px,py)}}}
+];
+
+/* ---- çizim ve olaylar ---- */
+const TOOL={};T.forEach(t=>TOOL[t.id]=t);
+const fieldHTML=(t,f)=>{if(f.h)return `<div class="fh">${f.h}</div>`;const id=`${t.id}-${f.id}`,w=f.w===6?' w6':f.w===2?' w2':'';
+ const ctl=f.t==='s'?`<select id="${id}">${f.o.map(([a,b])=>`<option value="${a}"${a===f.v?' selected':''}>${b}</option>`).join('')}</select>`:f.t==='ta'?`<textarea id="${id}" spellcheck="false">${esc(f.v)}</textarea>`:`<input id="${id}" value="${esc(f.v)}" ${/^\d|^-?\d/.test(f.v)&&!/\s|°/.test(f.v)?'inputmode="decimal"':''} autocomplete="off">`;
+ return `<div class="f${w}" data-f="${f.id}"><label for="${id}">${f.l}</label>${ctl}</div>`};
+const toolHTML=t=>`<article class="tool" id="t-${t.id}"><header><h3>${t.title}</h3></header><p class="hint">${t.hint}</p><div class="fields">${t.f.map(f=>fieldHTML(t,f)).join('')}</div><div class="out" aria-live="polite"></div></article>`;
+const calcHTML=`<div class="grid"><article class="tool"><header><h3>Dört işlem</h3></header><p class="hint">Toplama, çıkarma, çarpma, bölme, parantez ve yüzde. Klavyeden de yazabilirsin.</p><div class="fields"><div class="f w6"><label for="c-in">İşlem</label><input id="c-in" class="calc-in" inputmode="decimal" autocomplete="off" value="(4,6 × 25000) ÷ 100"></div></div><div class="keys" id="keys"></div></article>
+<article class="tool"><div class="cap">Sonuç</div><div class="big" id="c-out">—</div><div class="acts"><button class="btn pri" id="c-save" type="button">Geçmişe ekle</button><button class="btn" id="c-copy" type="button">Kopyala</button></div><div class="cap" style="margin-top:16px">Geçmiş — dokununca işlem geri gelir</div><ul class="hist" id="c-hist"></ul></article></div>`;
+$('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" data-t="${k}" aria-selected="false">${n}</button>`).join('');
+$('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" role="tabpanel" hidden><p class="intro">${intro}</p>${k==='hesap'?calcHTML:`<div class="grid">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('');
+
+function run(t){const el=$('#t-'+t.id),get=id=>el.querySelector(`#${t.id}-${id}`),v={s:id=>get(id)?.value??'',n:id=>num(get(id)?.value)};
+ t.f.forEach(f=>{if(f.show){el.querySelector(`[data-f="${f.id}"]`).hidden=!f.show(v)}});
+ let r;try{r=t.calc(v)}catch(e){r={err:'Bu değerlerle hesaplanamadı. Girdileri kontrol et.'}}
+ const out=el.querySelector('.out');
+ if(r.err){out.innerHTML=`<p class="err">${esc(r.err)}</p>`;return}
+ const plain=r.copy??String(r.big).replace(/<[^>]+>/g,' ').replace(/\s+/g,' ').trim();
+ out.innerHTML=`<div class="cap">${r.cap}</div><div class="big">${r.big}</div>${r.sub?`<p class="sub">${r.sub}</p>`:''}${r.rows?.length?`<dl>${r.rows.map(([a,b])=>`<dt>${a}</dt><dd>${b}</dd>`).join('')}</dl>`:''}${r.fig||''}${r.steps?.length?`<details open><summary>Çözüm adımları</summary><ol>${r.steps.map(s=>`<li>${s}</li>`).join('')}</ol></details>`:''}<div class="acts"><button class="btn" type="button" data-copy="${esc(plain)}">Sonucu kopyala</button></div>`;
+}
+T.forEach(t=>{const el=$('#t-'+t.id);t.f.forEach(f=>{if(f.h)return;const c=el.querySelector(`#${t.id}-${f.id}`),s=store.get(c.id);if(s!==null)c.value=s;const h=()=>{store.set(c.id,c.value);run(t)};c.addEventListener('input',h);c.addEventListener('change',h)});run(t)});
+
+/* dört işlem */
+function calc(str){const s=str.replace(/[×xX]/g,'*').replace(/[÷:]/g,'/').replace(/−/g,'-');let i=0;const peek=()=>{while(s[i]===' ')i++;return s[i]};
+ const pct=r=>{if(peek()==='%'){i++;return r/100}return r};
+ function atom(){const c=peek();if(c==='-'){i++;return-atom()}if(c==='+'){i++;return atom()}if(c==='('){i++;const r=expr();if(peek()!==')')throw 0;i++;return pct(r)}
+  const m=/^[0-9]+(?:[.,][0-9]+)?|^[.,][0-9]+/.exec(s.slice(i));if(!m)throw 0;i+=m[0].length;return pct(Number(m[0].replace(',','.')))}
+ function term(){let r=atom();for(;;){const c=peek();if(c==='*'){i++;r*=atom()}else if(c==='/'){i++;const d=atom();if(d===0)throw 'z';r/=d}else return r}}
+ function expr(){let r=term();for(;;){const c=peek();if(c==='+'){i++;r+=term()}else if(c==='-'){i++;r-=term()}else return r}}
+ const r=expr();if(peek()!==undefined)throw 0;return r}
+const KEYS=['C','(',')','÷','7','8','9','×','4','5','6','−','1','2','3','+','0',',','⌫','='];
+$('#keys').innerHTML=KEYS.map(k=>`<button type="button" class="${'÷×−+()'.includes(k)?'op':k==='='?'eq':''}" data-k="${k}" aria-label="${k==='⌫'?'Sil':k}">${k}</button>`).join('');
+let hist=[];try{hist=JSON.parse(store.get('hist')||'[]')}catch(e){}
+const cin=$('#c-in'),cout=$('#c-out');let last=NaN;{const s=store.get('c-in');if(s!==null)cin.value=s}
+function runCalc(){try{last=calc(cin.value);cout.textContent=fmt(last,10)}catch(e){last=NaN;cout.innerHTML=cin.value.trim()?`<span class="err" style="font-size:24px">${e==='z'?'Sıfıra bölünemez':'İşlem tamamlanmadı'}</span>`:'—'}store.set('c-in',cin.value)}
+function renderHist(){$('#c-hist').innerHTML=hist.length?hist.map((h,j)=>`<li><button type="button" data-h="${j}"><span>${esc(h.e)}</span><b>= ${esc(fmt(h.r,10))}</b></button></li>`).join(''):'<li class="empty">Henüz kayıt yok.</li>'}
+function saveHist(){if(!Number.isFinite(last))return;hist.unshift({e:cin.value,r:last});hist=hist.slice(0,12);store.set('hist',JSON.stringify(hist));renderHist()}
+$('#keys').addEventListener('click',e=>{const k=e.target.closest('[data-k]')?.dataset.k;if(!k)return;if(k==='C')cin.value='';else if(k==='⌫')cin.value=cin.value.slice(0,-1);else if(k==='='){saveHist();if(Number.isFinite(last))cin.value=String(last).replace('.',',')}else cin.value+=('÷×−+'.includes(k)?' '+k+' ':k);runCalc()});
+cin.addEventListener('input',runCalc);cin.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveHist()}});
+$('#c-save').addEventListener('click',saveHist);$('#c-hist').addEventListener('click',e=>{const b=e.target.closest('[data-h]');if(b){cin.value=hist[b.dataset.h].e;runCalc()}});
+$('#c-copy').addEventListener('click',e=>copy(e.target,Number.isFinite(last)?fmt(last,10):''));
+runCalc();renderHist();
+
+function fallbackCopy(t){return new Promise((ok,no)=>{try{const a=document.createElement('textarea');a.value=t;a.setAttribute('readonly','');a.style.position='fixed';a.style.opacity='0';document.body.appendChild(a);a.select();const r=document.execCommand('copy');a.remove();r?ok():no()}catch(e){no(e)}})}
+function copy(btn,t){if(!t)return;const o=btn.textContent;(window.AndroidBridge?new Promise(ok=>{window.AndroidBridge.copy(t);ok()}):navigator.clipboard&&window.isSecureContext?navigator.clipboard.writeText(t).catch(()=>fallbackCopy(t)):fallbackCopy(t)).then(()=>{btn.textContent='Kopyalandı'},()=>{btn.textContent='Kopyalanamadı'}).finally(()=>setTimeout(()=>btn.textContent=o,1400))}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if(b)copy(b,b.dataset.copy)});
+function show(k){if(!TABS.some(t=>t[0]===k))k='olcek';$$('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));$$('.panel').forEach(p=>p.hidden=p.id!=='p-'+k);store.set('tab',k);try{if(location.hash!=='#'+k)history.replaceState(null,'','#'+k)}catch(e){}}
+$('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.dataset.t)});
+window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
+show(location.hash.slice(1)||store.get('tab')||'olcek');
+{let p='';for(let i=1;i<9;i++){const r=i*34;let d='';for(let a=0;a<=360;a+=12){const k=rad(a),w=r*(1+.12*Math.sin(3*k+i)+.06*Math.cos(5*k));d+=(a?'L':'M')+(980+w*1.6*Math.cos(k)).toFixed(1)+' '+(90+w*.8*Math.sin(k)).toFixed(1)}p+=`<path d="${d}Z" fill="none" stroke="#fff" stroke-width="1.2"/>`}$('#topo').innerHTML=p}
+}
+if('serviceWorker' in navigator&&window.isSecureContext&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
+</script>
+</body>
+</html>
