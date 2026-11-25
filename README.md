@@ -2,7 +2,7 @@
 
 **Fikir ve tasarım: Miraç Şen**
 
-Harita üzerinde yapılan hesapları — ölçek, rakım, coğrafi ve grid koordinat, MGRS, milyem/derece, İSA, P noktası, GİA–MİA, pafta — bilinen sayıları yazarak, çözüm adımlarıyla hesaplayan, internetsiz çalışan uygulama. Telefonun GPS'i ve pusulasıyla ölçüm, kayıtlı noktalar, araç arama, favoriler ve Türkçe/İngilizce dil desteği içerir.
+Harita üzerinde yapılan hesapları — ölçek, rakım, coğrafi ve grid koordinat, MGRS, milyem/derece, İSA, P noktası, GİA–MİA, pafta — bilinen sayıları yazarak, çözüm adımlarıyla hesaplayan, internetsiz çalışan uygulama. Telefonun GPS’i ve pusulasıyla ölçüm, Türkiye parametreli ve yerel düzeltmeli ED50 ↔ WGS84 dönüşümü, kayıtlı noktalar, araç arama, favoriler ve Türkçe/İngilizce dil desteği içerir.
 
 **Uygulama:** https://miraacsen7.github.io/HaritaCetveli/
 

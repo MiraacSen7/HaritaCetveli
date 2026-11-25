@@ -228,7 +228,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const store={get(k){try{return localStorage.getItem('hc2:'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('hc2:'+k,v)}catch(e){}}};
 const EN=store.get('lang')==='en',L=(tr,en)=>EN?en:tr,LOC=EN?'en-US':'tr-TR',DEC=EN?'.':',';
 document.documentElement.lang=EN?'en':'tr';
-const OWNER='Miraç Şen',APP=L('Harita Cetveli','Map Ruler'),VER='2.0';
+const OWNER='Miraç Şen',APP=L('Harita Cetveli','Map Ruler'),VER='2.1';
 const num=v=>{v=String(v??'').trim().replace(/\s/g,'');if(/,/.test(v)&&!/\./.test(v))v=v.replace(',','.');else v=v.replace(/,/g,'');return v===''?NaN:Number(v)};
 const fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString(LOC,{maximumFractionDigits:d}):'—';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -258,8 +258,15 @@ function utmI(zone,h,E,N,el){const e2=el.f*(2-el.f),ep=e2/(1-e2),a=el.a,x=E-5000
     lon:deg(l0+(D-(1+2*T1+C1)*D**3/6+(5-2*C1+28*T1-3*C1*C1+8*ep+24*T1*T1)*D**5/120)/c)}}
 function toX(lat,lon,el){const e2=el.f*(2-el.f),p=rad(lat),l=rad(lon),N=el.a/Math.sqrt(1-e2*Math.sin(p)**2);return[N*Math.cos(p)*Math.cos(l),N*Math.cos(p)*Math.sin(l),N*(1-e2)*Math.sin(p)]}
 function fromX([x,y,z],el){const e2=el.f*(2-el.f),pp=Math.hypot(x,y);let p=Math.atan2(z,pp*(1-e2));for(let i=0;i<8;i++){const N=el.a/Math.sqrt(1-e2*Math.sin(p)**2),h=pp/Math.cos(p)-N;p=Math.atan2(z,pp*(1-e2*N/(N+h)))}return{lat:deg(p),lon:deg(Math.atan2(y,x))}}
-const ed2wgs=(la,lo)=>{const X=toX(la,lo,INT);return fromX([X[0]-87,X[1]-98,X[2]-121],WGS)};
-const wgs2ed=(la,lo)=>{const X=toX(la,lo,WGS);return fromX([X[0]+87,X[1]+98,X[2]+121],INT)};
+const SEC=Math.PI/648000;
+const DTP={tr:{t:[-84.1,-101.8,-129.7],r:[0,0,0.468],s:1.05},eu:{t:[-87,-98,-121],r:[0,0,0],s:0}};
+let DM='tr',LC=null;
+function pv(X,p,inv){const g=inv?-1:1,[rx,ry,rz]=p.r.map(a=>a*SEC*g),k=1+g*p.s*1e-6,Y=inv?[X[0]-p.t[0],X[1]-p.t[1],X[2]-p.t[2]]:X;
+ const R=[k*(Y[0]-rz*Y[1]+ry*Y[2]),k*(rz*Y[0]+Y[1]-rx*Y[2]),k*(-ry*Y[0]+rx*Y[1]+Y[2])];return inv?R:[R[0]+p.t[0],R[1]+p.t[1],R[2]+p.t[2]]}
+const lcShift=(la,lo,sg)=>LC?{lat:la+sg*LC.dN/111320,lon:lo+sg*LC.dE/(111320*Math.cos(rad(la)))}:{lat:la,lon:lo};
+const ed2wgsM=(la,lo,m)=>fromX(pv(toX(la,lo,INT),DTP[m]),WGS);
+const ed2wgs=(la,lo)=>{const w=ed2wgsM(la,lo,DM);return lcShift(w.lat,w.lon,1)};
+const wgs2ed=(la,lo)=>{const c=lcShift(la,lo,-1);return fromX(pv(toX(c.lat,c.lon,WGS),DTP[DM],true),INT)};
 const ROWL='ABCDEFGHJKLMNPQRSTUV',COLS=['ABCDEFGH','JKLMNPQR','STUVWXYZ'],BANDS='CDEFGHJKLMNPQRSTUVWX';
 const band=lat=>BANDS[Math.max(0,Math.min(19,Math.floor((lat+80)/8)))];
 const sq100=(z,E,N)=>(COLS[(z-1)%3][Math.floor(E/1e5)-1]||'?')+ROWL[(Math.floor(N/1e5)+(z%2?0:5))%20];
@@ -529,8 +536,13 @@ calc(v){const la=parseDeg(v.s('la')),lo=parseDeg(v.s('lo')),ad=esc(v.s('ad').tri
 ];
 
 /* ---- profil (Haritam) ---- */
-const PROF_DEF={sc:'25000',z:'36',dt:'ed50',ks:'696000',ky:'4278000',isa:'85',ya:'26'};
+const PROF_DEF={sc:'25000',z:'36',dt:'ed50',ks:'696000',ky:'4278000',isa:'85',ya:'26',dm:'tr',lcOn:'0',lcEe:'',lcNe:'',lcEw:'',lcNw:''};
 let prof={...PROF_DEF};try{Object.assign(prof,JSON.parse(store.get('prof')||'{}'))}catch(e){}
+function lcCalc(){const z=+prof.z,Ee=num(prof.lcEe),Ne=num(prof.lcNe),Ew=num(prof.lcEw),Nw=num(prof.lcNw);
+ if(!(z>=1&&z<=60)||![Ee,Ne,Ew,Nw].every(Number.isFinite)||!(Ee>1e5&&Ee<9e5&&Ew>1e5&&Ew<9e5))return null;
+ const g=utmI(z,'K',Ee,Ne,INT),w=ed2wgsM(g.lat,g.lon,prof.dm||'tr'),m=utmF(w.lat,w.lon,WGS,z);return{dE:Ew-m.E,dN:Nw-m.N}}
+function setDatum(){DM=DTP[prof.dm]?prof.dm:'tr';const c=lcCalc();LC=prof.lcOn==='1'&&c&&Math.hypot(c.dE,c.dN)<200?c:null}
+setDatum();
 const PMAP={sc:[['tepe','sc'],['oran','sc'],['bil','sc']],n:[['olc','n'],['egim','n']],z:[['pm','z'],['coz','z']],dt:[['coz','dt']],ks:[['pm','ks'],['coz','ks']],ky:[['pm','ky'],['coz','ky']],isa:[['iki','isa'],['gm','isa']],ya:[['gm','ya']]};
 /* ---- kayıtlı noktalar ---- */
 let pts=[];try{pts=JSON.parse(store.get('pts')||'[]')}catch(e){}
@@ -551,6 +563,13 @@ const haritamHTML=`<div class="grid">
 <div class="fh">${L('Pafta sol alt köşesindeki tam değerler','Full values at the sheet’s lower-left corner')}</div><div class="f"><label for="pf-ks">${L('Sağa','Easting')}</label><input id="pf-ks" inputmode="numeric" value="${esc(prof.ks)}"></div><div class="f"><label for="pf-ky">${L('Yukarı','Northing')}</label><input id="pf-ky" inputmode="numeric" value="${esc(prof.ky)}"></div>
 <div class="fh">${L('Sapma (milyem, doğu +)','Declination (mils, east +)')}</div><div class="f"><label for="pf-isa">${L('Bu yılın İSA’sı','This year’s G-M angle')}</label><input id="pf-isa" inputmode="decimal" value="${esc(prof.isa)}"></div><div class="f"><label for="pf-ya">${L('Yaklaşma açısı (YA)','Grid convergence')}</label><input id="pf-ya" inputmode="decimal" value="${esc(prof.ya)}"></div></div>
 <div class="chips" id="pf-chips"></div><p class="note">${L('İSA’yı “Açılar ve pusula” sekmesinde hesaplayıp “Haritam’a kaydet” ile buraya alabilirsin.','Compute the G-M angle in “Angles & compass” and use “Save to My map”.')}</p></article>
+<article class="tool" id="t-lc"><header><h3>${L('ED50 ↔ WGS84 hassas dönüşüm','Precise ED50 ↔ WGS84 conversion')}</h3></header><p class="hint">${L('Siyah grid (ED50) ile GPS/kırmızı grid (WGS84) arasındaki çevirinin nasıl yapılacağını seç. Yerel düzeltme, bölgende kalan farkı da giderir.','Choose how black grid (ED50) and GPS/red grid (WGS84) are converted. A local correction removes the remaining difference in your area.')}</p>
+<div class="fields"><div class="f w6"><label for="lc-dm">${L('Dönüşüm yöntemi','Conversion method')}</label><select id="lc-dm">${opt([['tr',L('Türkiye parametreleri (EPSG 1784, ±2 m) — önerilen','Türkiye parameters (EPSG 1784, ±2 m) — recommended')],['eu',L('Avrupa ortalaması (−87, −98, −121 m)','European mean (−87, −98, −121 m)')]],prof.dm)}</select></div>
+<div class="fh">${L('Yerel düzeltme (isteğe bağlı)','Local correction (optional)')}</div>
+<div class="f"><label for="lc-ee">${L('Bilinen nokta — ED50 sağa','Known point — ED50 easting')}</label><input id="lc-ee" inputmode="numeric" value="${esc(prof.lcEe)}" placeholder="702541"></div><div class="f"><label for="lc-ne">${L('ED50 yukarı','ED50 northing')}</label><input id="lc-ne" inputmode="numeric" value="${esc(prof.lcNe)}" placeholder="4283911"></div>
+<div class="f"><label for="lc-ew">${L('Aynı nokta — WGS84 sağa','Same point — WGS84 easting')}</label><input id="lc-ew" inputmode="numeric" value="${esc(prof.lcEw)}" placeholder="702505"></div><div class="f"><label for="lc-nw">${L('WGS84 yukarı','WGS84 northing')}</label><input id="lc-nw" inputmode="numeric" value="${esc(prof.lcNw)}" placeholder="4283735"></div>
+<div class="f w6"><label for="lc-on">${L('Yerel düzeltme','Local correction')}</label><select id="lc-on">${opt([['0',L('Kullanma','Off')],['1',L('Kullan','On')]],prof.lcOn)}</select></div></div>
+<div class="acts"><button class="btn" type="button" id="lc-gps">${L('WGS84 değerini GPS’ten al','Take WGS84 from GPS')}</button></div><div class="out" id="lc-out" aria-live="polite"></div></article>
 <article class="tool" id="t-gps"><header><h3>${L('Konumum (GPS)','My position (GPS)')}</h3></header><p class="hint">${L('Telefonun GPS’iyle bulunduğun yerin coğrafi koordinatı, grid koordinatı ve MGRS bildirimi.','Your geographic, grid and MGRS position from the phone’s GPS.')}</p><div class="acts"><button class="btn pri" type="button" id="gps-go">${L('Konumumu bul','Find my position')}</button></div><div class="out" id="gps-out" aria-live="polite"><p class="note">${L('Açık alanda daha doğru sonuç verir. Konum yalnızca bu cihazda kullanılır, hiçbir yere gönderilmez.','Works best outdoors. Your position stays on this device and is never sent anywhere.')}</p></div></article>
 <article class="tool" id="t-cmp"><header><h3>${L('Telefon pusulası','Phone compass')}</h3></header><p class="hint">${L('Telefonu yere paralel tut, üst kenarını hedefe çevir. Manyetik istikamet açısı (MİA) okunur; Haritam’daki İSA ile GİA’ya çevrilir.','Hold the phone flat and point its top edge at the target. Reads the magnetic azimuth and converts it to grid azimuth with your G-M angle.')}</p>
 <div class="acts"><button class="btn pri" type="button" id="cmp-go">${L('Pusulayı başlat','Start compass')}</button><button class="btn" type="button" id="cmp-hold" disabled>${L('Değeri sabitle','Hold value')}</button><button class="btn" type="button" id="cmp-send" disabled>${L('GİA–MİA aracına aktar','Send to GA–MA tool')}</button></div><div class="out" id="cmp-out" aria-live="polite"><p class="note">${L('Telefon pusulası askeri pusula kadar hassas değildir; metal cisimlerden uzak dur, gerekirse telefonu havada 8 çizerek kalibre et.','A phone compass is less precise than a lensatic compass; keep away from metal and wave the phone in a figure 8 to calibrate.')}</p></div></article>
@@ -573,7 +592,7 @@ $('#appname').textContent=APP;$('#tagline').textContent=L('Haritadan okuduğun s
 $('#q').placeholder=L('Araç ara: rakım, MGRS, pusula…','Search tools: elevation, MGRS, compass…');
 $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.lang==='en')===EN)));
 $('#own').textContent=`© ${new Date().getFullYear()} ${OWNER} · ${APP} ${VER} · ${L('Fikir ve tasarım','Idea and design')}: ${OWNER}`;
-$('#foot').textContent=L('Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ile WGS84 arasında Avrupa ortalama datum farkı (−87, −98, −121 m) alınır; sonuç birkaç metre sapabilir. Girdiğin değerler bu cihazda hatırlanır.','Grid calculations use 6° UTM zones. ED50 ↔ WGS84 uses the European mean datum shift (−87, −98, −121 m); results may differ by a few metres. Your inputs are remembered on this device.');
+$('#foot').textContent=L('Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ↔ WGS84 çevirisi Haritam sekmesinde seçilen yöntemle yapılır (önerilen: Türkiye parametreleri, yaklaşık ±2 m; yerel düzeltmeyle daha iyi). Girdiğin değerler bu cihazda hatırlanır.','Grid calculations use 6° UTM zones. ED50 ↔ WGS84 uses the method chosen in My map (recommended: Türkiye parameters, about ±2 m; better with a local correction). Your inputs are remembered on this device.');
 $('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" data-t="${k}" aria-selected="false">${n}</button>`).join('');
 $('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" role="tabpanel" hidden>${intro?`<p class="intro">${intro}</p>`:''}${k==='haritam'?haritamHTML:k==='fav'?favHTML:k==='hesap'?calcHTML:k==='hakkinda'?aboutHTML:`<div class="grid" id="g-${k}">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('')+'<datalist id="ptlist"></datalist>';
 
@@ -598,6 +617,19 @@ function applyProf(keys){const k=keys||Object.keys(PMAP);k.forEach(key=>{const v
  const touched=new Set();k.concat(k.includes('sc')?['n']:[]).forEach(key=>(PMAP[key]||[]).forEach(([tid])=>touched.add(tid)));touched.forEach(id=>run(TOOL[id]));chips()}
 ['sc','z','dt','ks','ky','isa','ya'].forEach(k=>{const c=$('#pf-'+k);const h=()=>{prof[k]=c.value;store.set('prof',JSON.stringify(prof));applyProf([k])};c.addEventListener('input',h);c.addEventListener('change',h)});
 if(!store.get('prof')){store.set('prof',JSON.stringify(prof))}chips();
+function lcOut(){const o=$('#lc-out'),c=lcCalc(),z=+prof.z;let s='';
+ const ks=num(prof.ks),ky=num(prof.ky);if(z>=1&&ks>1e5&&ky>0){const g=utmI(z,'K',ks+3000,ky+3000,INT),a=utmF(...Object.values(ed2wgsM(g.lat,g.lon,'tr')),WGS,z),b=utmF(...Object.values(ed2wgsM(g.lat,g.lon,'eu')),WGS,z);
+  s+=`<dl><dt>${L('Paftanda iki yöntem arası fark','Difference between methods on your sheet')}</dt><dd>${fmt(Math.hypot(a.E-b.E,a.N-b.N),1)} m</dd>`}
+ else s+='<dl>';
+ s+=`<dt>${L('Kullanılan yöntem','Method in use')}</dt><dd>${DM==='tr'?L('Türkiye (EPSG 1784)','Türkiye (EPSG 1784)'):L('Avrupa ortalaması','European mean')}</dd>`;
+ if(c){const d=Math.hypot(c.dE,c.dN);s+=`<dt>${L('Yerel kalan fark','Remaining local difference')}</dt><dd>${fmt(c.dE,1)} m ${L('sağa','E')}, ${fmt(c.dN,1)} m ${L('yukarı','N')} (${fmt(d,1)} m)</dd></dl>`;
+  s+=d>=200?`<p class="err">${L('Fark çok büyük: noktalar aynı yer değil ya da dilim yanlış. Düzeltme uygulanmadı.','Difference too large: points differ or the zone is wrong. Correction not applied.')}</p>`:LC?`<p class="sub good">${L('Yerel düzeltme açık: bütün ED50 ↔ WGS84 çevirilerine uygulanıyor. Bu noktadan uzaklaştıkça (15–20 km) etkisi azalır.','Local correction is on and applied to every ED50 ↔ WGS84 conversion. It is most accurate within 15–20 km of the point.')}</p>`:`<p class="note">${L('Düzeltmeyi uygulamak için “Kullan”ı seç.','Select “On” to apply the correction.')}</p>`}
+ else s+=`</dl><p class="note">${L('Yerel düzeltme için koordinatı iki sistemde de bilinen bir nokta gir: örneğin bir nirengi noktasının paftadaki siyah grid değeri ile o noktada GPS’in verdiği değer.','For a local correction enter a point known in both systems, e.g. a trig point’s black-grid value from the map and the GPS reading at that point.')}</p>`;
+ o.innerHTML=s}
+function datumChanged(){setDatum();lcOut();T.forEach(run);renderPts()}
+[['dm','lc-dm'],['lcEe','lc-ee'],['lcNe','lc-ne'],['lcEw','lc-ew'],['lcNw','lc-nw'],['lcOn','lc-on']].forEach(([k,id])=>{const c=$('#'+id);const h=()=>{prof[k]=c.value;store.set('prof',JSON.stringify(prof));datumChanged()};c.addEventListener('input',h);c.addEventListener('change',h)});
+$('#lc-gps').addEventListener('click',()=>{const b=$('#lc-gps');try{navigator.geolocation.getCurrentPosition(pos=>{const z=+prof.z||Math.min(60,Math.floor((pos.coords.longitude+180)/6)+1),u=utmF(pos.coords.latitude,pos.coords.longitude,WGS,z);
+ $('#lc-ew').value=Math.round(u.E);$('#lc-nw').value=Math.round(u.N);prof.lcEw=String(Math.round(u.E));prof.lcNw=String(Math.round(u.N));store.set('prof',JSON.stringify(prof));datumChanged();flash(b,L(`Alındı (± ${fmt(pos.coords.accuracy,0)} m)`,`Taken (± ${fmt(pos.coords.accuracy,0)} m)`))},()=>flash(b,L('Konum alınamadı','No position')),{enableHighAccuracy:true,timeout:20000,maximumAge:0})}catch(e){flash(b,L('Konum alınamadı','No position'))}});
 
 /* ---- kayıtlı noktalar ---- */
 function ptGeo(p){try{if(p.lat!=null)return{lat:p.lat,lon:p.lon};if(!(p.z>=1&&p.E>1e5&&p.E<9e5))return null;const g=utmI(p.z,'K',p.E,p.N,p.dt==='wgs'?WGS:INT);return p.dt==='wgs'?g:ed2wgs(g.lat,g.lon)}catch(e){return null}}
@@ -609,7 +641,7 @@ $('#pts').addEventListener('click',e=>{const d=e.target.closest('[data-del]'),u=
  if(d){pts.splice(+d.dataset.del,1);savePts()}
  if(u){const p=pts[+u.dataset.use];setField('iki',u.dataset.to,`${p.E} ${p.N}`);run(TOOL.iki);go('grid','t-iki')}});
 $('#np-add').addEventListener('click',()=>{const p=parsePt($('#np-c').value),er=$('#np-err');if(!p||!p.abs){er.textContent=L('Tam koordinatı “702541 4283911” biçiminde yaz.','Enter full coordinates like “702541 4283911”.');er.hidden=false;return}er.hidden=true;addPt({name:$('#np-name').value.trim(),E:p.E,N:p.N,z:+prof.z||null,dt:prof.dt});$('#np-name').value='';$('#np-c').value=''});
-renderPts();
+renderPts();lcOut();
 
 /* ---- GPS ---- */
 let lastFix=null;
@@ -687,7 +719,7 @@ window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 const fold=s=>String(s).toLocaleLowerCase(LOC).replace(/ı/g,'i').normalize('NFD').replace(/[̀-ͯ]/g,'');
 const TABNAME=Object.fromEntries(TABS.map(t=>[t[0],t[1]]));
 const IDX=[...T.map(t=>({tab:t.tab,id:'t-'+t.id,title:t.title,text:fold(t.title+' '+t.hint)})),
- ...[['t-prof',L('Haritam (ölçek, dilim, İSA)','My map (scale, zone, G-M)')],['t-gps',L('Konumum (GPS, koordinat, MGRS)','My position (GPS, coordinates, MGRS)')],['t-cmp',L('Telefon pusulası (MİA, GİA)','Phone compass (MA, GA)')],['t-pts',L('Kayıtlı noktalar','Saved points')]].map(([id,ti])=>({tab:'haritam',id,title:ti,text:fold(ti)})),
+ ...[['t-prof',L('Haritam (ölçek, dilim, İSA)','My map (scale, zone, G-M)')],['t-lc',L('ED50 ↔ WGS84 hassas dönüşüm (datum, yerel düzeltme)','Precise ED50 ↔ WGS84 (datum, local correction)')],['t-gps',L('Konumum (GPS, koordinat, MGRS)','My position (GPS, coordinates, MGRS)')],['t-cmp',L('Telefon pusulası (MİA, GİA)','Phone compass (MA, GA)')],['t-pts',L('Kayıtlı noktalar','Saved points')]].map(([id,ti])=>({tab:'haritam',id,title:ti,text:fold(ti)})),
  {tab:'hesap',id:'t-calc',title:L('Dört işlem (hesap makinesi)','Calculator'),text:fold(L('dört işlem hesap makinesi toplama çarpma','calculator add multiply'))},{tab:'hakkinda',id:'p-hakkinda',title:L('Hakkında','About'),text:fold(L('hakkında gizlilik sürüm '+OWNER,'about privacy version '+OWNER))}];
 const q=$('#q'),qres=$('#qres');
 function search(){const s=fold(q.value.trim());if(!s){qres.hidden=true;return}const words=s.split(/\s+/);const hits=IDX.filter(x=>words.every(w=>x.text.includes(w))).slice(0,8);
