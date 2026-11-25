@@ -240,7 +240,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const store={get(k){try{return localStorage.getItem('hc2:'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('hc2:'+k,v)}catch(e){}}};
 const EN=store.get('lang')==='en',L=(tr,en)=>EN?en:tr,LOC=EN?'en-US':'tr-TR',DEC=EN?'.':',';
 document.documentElement.lang=EN?'en':'tr';
-const OWNER='Miraç Şen',APP=L('Harita Cetveli','Map Ruler'),VER='2.3';
+const OWNER='Miraç Şen',APP=L('Harita Cetveli','Map Ruler'),VER='2.4';
 const num=v=>{v=String(v??'').trim().replace(/\s/g,'');if(/,/.test(v)&&!/\./.test(v))v=v.replace(',','.');else v=v.replace(/,/g,'');return v===''?NaN:Number(v)};
 const fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString(LOC,{maximumFractionDigits:d}):'—';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -332,8 +332,8 @@ function figP(r){const a=Math.abs(r),mx=Math.max(5,Math.ceil(a)),x0=r<0?260:40,d
   <line class="g" x1="${px}" y1="${py}" x2="${px}" y2="50" stroke-dasharray="4 4" style="opacity:.8"/><text class="mg" x="${px+dir*-6}" y="120" text-anchor="${r<0?'start':'end'}">${L('GK','GN')}</text>
   <line class="bl" x1="${px}" y1="${py}" x2="${mxp}" y2="46" style="stroke:var(--err)"/><circle class="pt" cx="${mxp}" cy="46" r="5"/><circle cx="${px}" cy="${py}" r="6" fill="none" class="k"/>
   <text class="tx" x="${px+dir*-10}" y="${py+5}" text-anchor="${r<0?'start':'end'}">P</text><text class="tx" x="${mxp}" y="66" text-anchor="middle">${fDMa(a)}</text><text x="150" y="224" text-anchor="middle">${L('Ölçeksiz şema','Schematic, not to scale')}</text></svg>`}
-function figPafta(cell,px,py){let g='';const s=55,o=20;const code=(r,c)=>{const n=r<2,e=c>=2,Q=n?(e?'b':'a'):(e?'c':'d'),rn=r%2,cn=c%2;return Q+(rn?(cn?3:4):(cn?2:1))};
-  for(let r=0;r<4;r++)for(let c=0;c<4;c++){const cd=code(r,c);g+=`<rect x="${o+c*s}" y="${o+r*s}" width="${s}" height="${s}" class="${cd===cell?'hl':''}" fill="${cd===cell?'':'none'}" stroke="var(--line)"/><text x="${o+c*s+s/2}" y="${o+r*s+s/2+4}" text-anchor="middle" class="${cd===cell?'tx':''}">${cd}</text>`}
+function figPafta(cells,px,py){const has=c=>Array.isArray(cells)?cells.includes(c):c===cells;let g='';const s=55,o=20;const code=(r,c)=>{const n=r<2,e=c>=2,Q=n?(e?'b':'a'):(e?'c':'d'),rn=r%2,cn=c%2;return Q+(rn?(cn?3:4):(cn?2:1))};
+  for(let r=0;r<4;r++)for(let c=0;c<4;c++){const cd=code(r,c),on=has(cd);g+=`<rect x="${o+c*s}" y="${o+r*s}" width="${s}" height="${s}" class="${on?'hl':''}" fill="${on?'':'none'}" stroke="var(--line)"/><text x="${o+c*s+s/2}" y="${o+r*s+s/2+4}" text-anchor="middle" class="${on?'tx':''}">${cd}</text>`}
   g+=`<rect x="${o}" y="${o}" width="${4*s}" height="${4*s}" class="k"/><line class="k" x1="${o+2*s}" y1="${o}" x2="${o+2*s}" y2="${o+4*s}"/><line class="k" x1="${o}" y1="${o+2*s}" x2="${o+4*s}" y2="${o+2*s}"/>`;
   if(px!=null)g+=`<circle class="pt" cx="${o+px*4*s}" cy="${o+(1-py)*4*s}" r="6"/>`;
   return `<svg class="fig" viewBox="0 0 260 260" role="img" aria-label="${L('1/100 000 paftanın 1/50 000 ve 1/25 000 paftalara bölünmesi','A 1:100,000 sheet divided into 1:50,000 and 1:25,000 sheets')}">${g}</svg>`}
@@ -538,19 +538,36 @@ calc(v){const need=+v.s('o'),d=v.n('d');if(!(d>=0))return E(L('Uzaklığı metre
 f:[{id:'sc',l:L('Ölçek','Scale'),t:'s',o:SC,v:'25000',w:6}],
 calc(v){const n=+v.s('sc'),m=MUN[n],I=INFO[n],[c1,c2]=sinif(n);
  return{cap:L('Haritada 1 cm','1 cm on the map'),big:lenM(n/100),rows:[[L('Ölçeğe göre','By scale'),c1],[L('Kullanma maksadına göre','By purpose'),c2],[L('Pafta büyüklüğü','Sheet size'),I.paf],[L('Kapsam','Coverage'),I.ust],[L('Grid aralığı','Grid interval'),I.grid],[L('İnce münhani','Contour interval'),m[0]+' m'],[L('Kalın münhani','Index contour'),m[1]+' m'],[L('Yardımcı (uzun · kısa kesik)','Supplementary (long · short dash)'),`${fmt(m[2],1)} · ${fmt(m[3],1)} m`],[L('Haritada 1 mm','1 mm on the map'),lenM(n/1000)],...(n===25000?[[L('Plan müşirinde iki ince çizgi','Coordinate scale tick'),'20 m']]:[])],steps:[]}}},
-{tab:'pafta',id:'paf',title:L('Paftayı bölme ve noktanın paftasını bulma','Dividing a sheet and finding a point’s sheet'),hint:L('1/100 000 pafta 4 adet 1/50 000 (a b / d c), her 1/50 000 de 4 adet 1/25 000 (1 2 / 4 3) paftaya bölünür.','A 1:100,000 sheet splits into four 1:50,000 sheets (a b / d c), each into four 1:25,000 sheets (1 2 / 4 3).'),
-f:[{id:'ad',l:L('1/100 000 paftanın adı','Name of the 1:100,000 sheet'),v:L('ÖRNEK K34','SAMPLE K34'),w:6},{h:L('1/100 000 paftanın sol alt köşesi','Lower-left corner of the 1:100,000 sheet')},{id:'la',l:L('Enlem (° ′)','Latitude (° ′)'),v:'38 30'},{id:'lo',l:L('Boylam (° ′)','Longitude (° ′)'),v:'35 00'},{h:L('Paftası aranan nokta (isteğe bağlı)','Point to locate (optional)')},{id:'pa',l:L('Enlem (° ′ ″)','Latitude (° ′ ″)'),v:'38 40 48'},{id:'po',l:L('Boylam (° ′ ″)','Longitude (° ′ ″)'),v:'35 19 42'}],
-calc(v){const la=parseDM(v.s('la')),lo=parseDM(v.s('lo')),ad=esc(v.s('ad').trim()||L('Pafta','Sheet'));if(![la,lo].every(Number.isFinite))return E(L('Köşe enlem ve boylamını yaz.','Enter the corner latitude and longitude.'));
- const Q={a:[.25,0],b:[.25,.25],c:[0,.25],d:[0,0]},rng=(a,s)=>`${fDM(a)}–${fDM(a+s)}`;
- const rows=Object.entries(Q).map(([k,[dy,dx]])=>[`${ad}-${k} (1/50 000)`,`${rng(la+dy,.25)} ${HLA[0]}<br>${rng(lo+dx,.25)} ${HLO[0]}`]);
- const pa=parseDM(v.s('pa')),po=parseDM(v.s('po'));let cell=null,big=ad,cap=L('1/100 000 pafta','1:100,000 sheet'),px=null,py=null,st=[L('1/100 000: 30′ × 30′ · 1/50 000: 15′ × 15′ · 1/25 000: 7′30″ × 7′30″','1:100,000: 30′ × 30′ · 1:50,000: 15′ × 15′ · 1:25,000: 7′30″ × 7′30″')];
- if(Number.isFinite(pa)&&Number.isFinite(po)){py=(pa-la)/.5;px=(po-lo)/.5;
-  if(px<0||px>=1||py<0||py>=1){rows.unshift([L('Nokta','Point'),`<span class="bad">${L('Bu paftanın dışında','Outside this sheet')}</span>`]);px=py=null}
-  else{const n=py>=.5,e=px>=.5,Q2=n?(e?'b':'a'):(e?'c':'d'),qy=(py%.5)>=.25,qx=(px%.5)>=.25,nm=qy?(qx?2:1):(qx?3:4);cell=Q2+nm;
-   const sla=la+(n?.25:0)+(qy?.125:0),slo=lo+(e?.25:0)+(qx?.125:0);big=`${ad}-${Q2}${nm}`;cap=L('Noktanın 1/25 000 paftası','The point’s 1:25,000 sheet');
-   rows.unshift([L('1/25 000 pafta sınırı','1:25,000 sheet limits'),`${fDMS(sla)}–${fDMS(sla+.125)} ${HLA[0]}<br>${fDMS(slo)}–${fDMS(slo+.125)} ${HLO[0]}`],[L('1/50 000 paftası','1:50,000 sheet'),`${ad}-${Q2}`]);
-   st.push(L(`Nokta paftanın ${n?'kuzey':'güney'}-${e?'doğu':'batı'} çeyreğinde → ${Q2}`,`The point is in the ${n?'north':'south'}-${e?'east':'west'} quarter → ${Q2}`),L(`O çeyreğin ${qy?'kuzey':'güney'}-${qx?'doğu':'batı'} parçası → ${nm}`,`${qy?'North':'South'}-${qx?'east':'west'} part of that quarter → ${nm}`))}}
- return{cap,big,copy:big.replace(/&amp;/g,'&'),rows,steps:st,fig:figPafta(cell,px,py)}}}
+{tab:'pafta',id:'paf',title:L('Paftayı bölme ve noktanın paftasını bulma','Dividing a sheet and finding a point’s sheet'),hint:L('Elindeki paftanın adını ve kitabede yazan sol alt köşe koordinatını gir. 1/100 000 pafta 4 adet 1/50 000 (a b / d c), her 1/50 000 de 4 adet 1/25 000 (1 2 / 4 3) paftaya bölünür.','Enter your sheet’s name and the lower-left corner printed in its margin. A 1:100,000 sheet splits into four 1:50,000 sheets (a b / d c), each into four 1:25,000 sheets (1 2 / 4 3).'),
+f:[{id:'ad',l:L('Elindeki paftanın adı (her ölçekte olur)','Your sheet’s name (any scale)'),v:L('ÖRNEK K34-c1','SAMPLE K34-c1'),w:6},{h:L('Bu paftanın sol alt köşesi (kitabede yazar)','This sheet’s lower-left corner (printed in the margin)')},{id:'la',l:L('Enlem (° ′ ″)','Latitude (° ′ ″)'),v:'38 37 30'},{id:'lo',l:L('Boylam (° ′ ″)','Longitude (° ′ ″)'),v:'35 15 00'},{h:L('Paftası aranan nokta (isteğe bağlı)','Point to locate (optional)')},{id:'pa',l:L('Enlem (° ′ ″)','Latitude (° ′ ″)'),v:''},{id:'po',l:L('Boylam (° ′ ″)','Longitude (° ′ ″)'),v:''}],
+calc(v){const raw=v.s('ad').trim(),la=parseDM(v.s('la')),lo=parseDM(v.s('lo'));
+ if(![la,lo].every(Number.isFinite))return E(L('Paftanın sol alt köşe enlem ve boylamını yaz (ör. 36 45 00).','Enter the sheet’s lower-left latitude and longitude (e.g. 36 45 00).'));
+ const m=/^(.*?(?:\d|[\s\-–]))[\s\-–]*([a-dA-D])(?:[\s\-–]*([1-4]))?$/.exec(raw),q=m&&m[1].trim()?m[2].toLowerCase():null,n=q&&m[3]?+m[3]:null,base=esc((q?m[1]:raw).replace(/[\s\-–]+$/,'').trim()||L('Pafta','Sheet'));
+ const lvl=n?25:q?50:100,size={100:.5,50:.25,25:.125}[lvl],QY={a:.25,b:.25,c:0,d:0},QX={a:0,b:.25,c:.25,d:0},NY={1:.125,2:.125,3:0,4:0},NX={1:0,2:.125,3:.125,4:0};
+ const la100=la-(q?QY[q]:0)-(n?NY[n]:0),lo100=lo-(q?QX[q]:0)-(n?NX[n]:0);
+ const SCN=x=>({100:L('1/100 000','1:100,000'),50:L('1/50 000','1:50,000'),25:L('1/25 000','1:25,000')})[x];
+ const rng=(a,s)=>`${fDMS(a)}–${fDMS(a+s)} ${HLA[0]}`,rngo=(a,s)=>`${fDMS(a)}–${fDMS(a+s)} ${HLO[0]}`;
+ const nm50=q?`${base}-${q}`:null,nm25=n?`${base}-${q}${n}`:null;
+ const rows=[[L('Algılanan pafta','Detected sheet'),`${SCN(lvl)} · ${lvl===100?base:lvl===50?nm50:nm25}`],[`${SCN(100)} · ${base}`,`${rng(la100,.5)}<br>${rngo(lo100,.5)}`]];
+ if(q)rows.push([`${SCN(50)} · ${nm50}`,`${rng(la100+QY[q],.25)}<br>${rngo(lo100+QX[q],.25)}`]);
+ if(n)rows.push([`${SCN(25)} · ${nm25}`,`${rng(la,.125)}<br>${rngo(lo,.125)}`]);
+ const st=[L(`Ad “${esc(raw)}” → ${SCN(lvl)} pafta${q?` (çeyrek ${q}${n?', parça '+n:''})`:''}`,`Name “${esc(raw)}” → ${SCN(lvl)} sheet${q?` (quarter ${q}${n?', part '+n:''})`:''}`),L(`${SCN(100)} paftanın sol alt köşesi: ${fDMS(la100)} ${HLA[0]}, ${fDMS(lo100)} ${HLO[0]}`,`Lower-left of the ${SCN(100)} sheet: ${fDMS(la100)} ${HLA[0]}, ${fDMS(lo100)} ${HLO[0]}`),L('1/100 000: 30′ × 30′ · 1/50 000: 15′ × 15′ · 1/25 000: 7′30″ × 7′30″','1:100,000: 30′ × 30′ · 1:50,000: 15′ × 15′ · 1:25,000: 7′30″ × 7′30″')];
+ const off=x=>{const r=Math.abs(x*3600/(size*3600)-Math.round(x/size));return r>1e-6};let sub='';
+ if(off(la)||off(lo))sub=L(`Bu köşe ${SCN(lvl)} pafta sınırına denk gelmiyor (${lvl===25?'7′30″':lvl===50?'15′':'30′'}’nin katı olmalı). Kitabedeki sol alt köşe değerini kontrol et.`,`This corner is not on a ${SCN(lvl)} sheet boundary (should be a multiple of ${lvl===25?'7′30″':lvl===50?'15′':'30′'}). Check the lower-left value in the margin.`);
+ if(!sub&&lvl!==100){const o5=x=>Math.abs(x/.5-Math.round(x/.5))>1e-6;if(o5(la100)||o5(lo100))sub=L(`Ad ile köşe birbirini tutmuyor olabilir: bu köşeye göre 1/100 000 pafta ${fDMS(la100)} ${HLA[0]}, ${fDMS(lo100)} ${HLO[0]} noktasından başlıyor, ama 1/100 000 paftalar 30′’nin katlarından başlar. Adın sonundaki harf ve rakamı ya da köşe değerini kontrol et.`,`Name and corner may not match: this corner puts the 1:100,000 sheet at ${fDMS(la100)} ${HLA[0]}, ${fDMS(lo100)} ${HLO[0]}, but 1:100,000 sheets start on multiples of 30′. Check the letter/number at the end of the name or the corner.`)}
+ const code=(py,px)=>{const N=py>=.5,Ee=px>=.5,Q=N?(Ee?'b':'a'):(Ee?'c':'d'),qy=(py%.5)>=.25,qx=(px%.5)>=.25;return Q+(qy?(qx?2:1):(qx?3:4))};
+ const hl=n?[q+n]:q?[1,2,3,4].map(i=>q+i):[];
+ let big=lvl===100?base:lvl===50?nm50:nm25,cap=L('Elindeki pafta','Your sheet'),px=null,py=null;
+ const pa=parseDM(v.s('pa')),po=parseDM(v.s('po'));
+ if(v.s('pa').trim()||v.s('po').trim()){
+  if(![pa,po].every(Number.isFinite))rows.unshift([L('Nokta','Point'),`<span class="bad">${L('Enlem ve boylamı “36 52 10” biçiminde yaz.','Enter latitude and longitude like “36 52 10”.')}</span>`]);
+  else{py=(pa-la100)/.5;px=(po-lo100)/.5;
+   if(px<0||px>=1||py<0||py>=1){rows.unshift([L('Nokta','Point'),`<span class="bad">${L(`Bu 1/100 000 paftanın (${base}) dışında`,`Outside this 1:100,000 sheet (${base})`)}</span>`]);px=py=null}
+   else{const cd=code(py,px),inMine=lvl===100||(lvl===50&&cd[0]===q)||(lvl===25&&cd===q+n);big=`${base}-${cd}`;cap=L('Noktanın 1/25 000 paftası','The point’s 1:25,000 sheet');
+    const sla=la100+QY[cd[0]]+NY[cd[1]],slo=lo100+QX[cd[0]]+NX[cd[1]];
+    rows.unshift([L('Nokta hangi paftada','Point’s sheet'),`${big}${inMine?'':' · <span class="bad">'+L('senin paftanda değil','not on your sheet')+'</span>'}`],[L('O paftanın sınırı','That sheet’s limits'),`${rng(sla,.125)}<br>${rngo(slo,.125)}`]);
+    st.push(L(`Nokta 1/100 000 paftanın ${cd[0]} çeyreğinde, ${cd[1]} numaralı parçasında → ${big}`,`The point is in quarter ${cd[0]}, part ${cd[1]} → ${big}`))}}}
+ return{cap,big,sub,copy:big.replace(/&amp;/g,'&'),rows,steps:st,fig:figPafta(hl,px,py)}}}
 ];
 
 /* ---- profil (Haritam) ---- */
