@@ -1,0 +1,19 @@
+{
+  "name": "Harita Cetveli Beta",
+  "short_name": "Cetvel Beta",
+  "description": "Harita Cetveli'nin deneme sürümü. Fikir ve tasarım: Miraç Şen.",
+  "author": "Miraç Şen",
+  "lang": "tr",
+  "id": "./?beta",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#0f4c8a",
+  "theme_color": "#0f4c8a",
+  "icons": [
+    {"src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png"},
+    {"src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}
