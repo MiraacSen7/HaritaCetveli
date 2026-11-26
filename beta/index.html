@@ -893,7 +893,7 @@ function ptsCSV(){const rows=[[L('ad','name'),L('saga','easting'),L('yukari','no
  return rows.map(r=>r.map(c=>/[",;\n]/.test(String(c))?`"${String(c).replace(/"/g,'""')}"`:c).join(',')).join('\n')}
 function ptsGPX(){const x=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&apos;'}[c]));let w='';pts.forEach(p=>{const g=ptGeo(p);if(!g)return;w+=`  <wpt lat="${g.lat.toFixed(7)}" lon="${g.lon.toFixed(7)}"><name>${x(p.name)}</name><desc>${x(`${p.E} ${p.N}${p.z?' · '+L(p.z+'. dilim','zone '+p.z):''} · ${p.dt==='wgs'?'WGS84':'ED50'}`)}</desc></wpt>\n`});
  return `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Harita Cetveli — Miraç Şen" xmlns="http://www.topografix.com/GPX/1/1">\n${w}</gpx>\n`}
-if(window.AndroidBridge){const d=document.querySelector('[data-exp="dl"]');if(d)d.hidden=true}
+(()=>{let fr=false;try{fr=window.top!==window}catch(x){fr=true}if(window.AndroidBridge||fr){const d=document.querySelector('[data-exp="dl"]');if(d)d.hidden=true}})();
 $('#pts-exp').addEventListener('click',async e=>{const b=e.target.closest('[data-exp]');if(!b)return;if(!pts.length){flash(b,L('Kayıtlı nokta yok','No saved points'));return}const k=b.dataset.exp;
  if(k==='csv'){copy(b,ptsCSV());return}if(k==='gpx'){copy(b,ptsGPX());return}
  const gpx=ptsGPX(),name='harita-cetveli-noktalar.gpx';
