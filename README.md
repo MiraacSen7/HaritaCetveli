@@ -13,7 +13,10 @@ Uygulama içindeki **Hakkında → Doğruluk testleri** düğmesi, hesapları NO
 2. Paylaş düğmesi → **Ana Ekrana Ekle** → Ekle.
 3. Ana ekrandaki **Harita Cetveli** simgesine dokun. Bir kez açıldıktan sonra internet olmadan da çalışır.
 
-Android'de aynı adres Chrome ile açılıp **Uygulamayı yükle** ile de kurulabilir.
+## Android'e kurma
+[HaritaCetveli.apk](https://miraacsen7.github.io/HaritaCetveli/HaritaCetveli.apk) dosyasını indirip kur (bilinmeyen kaynaklardan yüklemeye izin vermen istenebilir). Uygulama her açılışta güncel sürümü buradan alır, yani yeni APK kurmana gerek kalmaz; internet yoksa telefondaki son kopya açılır.
+
+İstersen aynı adres Chrome ile açılıp **Uygulamayı yükle** ile de kurulabilir.
 
 ## Gizlilik
 Uygulama kişisel veri toplamaz, internete bir şey göndermez. Konum ve pusula yalnızca kullanıcı istediğinde, yalnızca cihazda kullanılır.
