@@ -205,6 +205,23 @@ h4{margin:2px 0 0;font:600 20px/1.15 "Barlow Condensed"}.where{margin:2px 0 8px;
 details.adv{background:none;padding:0;margin:0}details.adv>summary{list-style:none;display:flex;flex-direction:column;gap:2px}details.adv>summary::-webkit-details-marker{display:none}
 details.adv>summary h3::after{content:" ▸";color:var(--mut)}details.adv[open]>summary h3::after{content:" ▾"}
 .tlist{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}.tlist li{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px}.tlist small{color:var(--mut)}
+.mhead h2{margin:4px 0 4px;font-size:28px}.mhead .intro{margin-bottom:12px}
+.resume{margin:0 0 16px;border-color:var(--blue2);color:var(--blue2)}
+.menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:8px}
+.mtile{display:flex;gap:14px;align-items:flex-start;text-align:left;padding:16px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;min-height:92px;transition:border-color .15s,transform .15s}
+.mtile:hover{border-color:var(--blue2)}.mtile:active{transform:scale(.985)}
+.mtile:focus-visible,.back:focus-visible{outline:3px solid var(--blue2);outline-offset:2px}
+.mtile svg{flex:none;width:46px;height:46px;padding:10px;border-radius:12px;background:var(--blue);fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mtile[data-go=fav] svg{background:var(--gold);stroke:#14191e}
+.mtile[data-go=hakkinda] svg{background:var(--soft);stroke:var(--ink);border:1px solid var(--line)}
+.mtile b{display:block;font:600 21px/1.15 "Barlow Condensed",Barlow,sans-serif}
+.mtile small{display:block;margin-top:3px;color:var(--mut);font-size:15px;line-height:1.35}
+.mtile em{display:inline-block;margin-top:6px;font-style:normal;font-size:13px;font-weight:600;color:var(--mag)}
+.mtile.wide{grid-column:1/-1;background:linear-gradient(120deg,#0f4c8a,#1565c0);border-color:transparent;color:#fff}
+.mtile.wide small{color:rgba(255,255,255,.85)}.mtile.wide svg{background:rgba(255,255,255,.16)}
+@media(max-width:600px){.menu{grid-template-columns:1fr 1fr;gap:10px}.mtile{flex-direction:column;gap:10px;padding:14px;min-height:0}.mtile.wide{flex-direction:row;align-items:center}.mtile b{font-size:19px}.mtile small{font-size:14px}.mtile svg{width:42px;height:42px;padding:9px}.mhead h2{font-size:24px}}
+.back{display:inline-flex;align-items:center;gap:4px;min-height:40px;margin:0 0 10px -6px;padding:4px 10px 4px 4px;border:0;border-radius:8px;background:none;color:var(--blue2);font:600 16px Barlow,sans-serif;cursor:pointer}
+.back svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .about{max-width:760px}.about h2{font-size:34px;margin:0 0 4px;line-height:1.1}.about h3{margin:22px 0 6px}
 .about .sig{display:flex;gap:14px;align-items:center;margin:16px 0;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
 .about .sig img{width:56px;height:56px;border-radius:12px;flex:none}.about .sig b{font:700 22px "Barlow Condensed"}
@@ -242,7 +259,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const store={get(k){try{return localStorage.getItem('hc2b:'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('hc2b:'+k,v)}catch(e){}}};
 const EN=store.get('lang')==='en',L=(tr,en)=>EN?en:tr,LOC=EN?'en-US':'tr-TR',DEC=EN?'.':',';
 document.documentElement.lang=EN?'en':'tr';
-const OWNER='Miraç Şen',APP=L('Harita Cetveli Beta','Map Ruler Beta'),VER='2.5 beta';
+const OWNER='Miraç Şen',APP=L('Harita Cetveli Beta','Map Ruler Beta'),VER='2.5 beta 2';
 const num=v=>{v=String(v??'').trim().replace(/\s/g,'');if(/,/.test(v)&&!/\./.test(v))v=v.replace(',','.');else v=v.replace(/,/g,'');return v===''?NaN:Number(v)};
 const fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString(LOC,{maximumFractionDigits:d}):'—';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -384,6 +401,7 @@ function figPafta(cells,px,py){const has=c=>Array.isArray(cells)?cells.includes(
 
 /* ---- sekmeler ---- */
 const TABS=[
+['menu',L('Ana menü','Home'),''],
 ['haritam',L('Haritam','My map'),L('Haritanın sabit bilgilerini bir kez gir, bütün araçlara dolsun. Telefonun GPS’i ve pusulasıyla ölç, noktalarını sakla.','Enter your map’s fixed values once and every tool fills itself. Measure with your phone’s GPS and compass, and keep your points.')],
 ['fav',L('★ Favoriler','★ Favourites'),L('Araç kartlarındaki yıldıza dokunduğun araçlar burada toplanır.','Tools you star appear here.')],
 ['olcek',L('Ölçek ve mesafe','Scale & distance'),L('Harita uzunluğunu araziye, araziyi haritaya çevir; kâğıtla ölçtüğün eğri yolu topla.','Convert map length to ground distance and back; add up a curved route measured with a paper strip.')],
@@ -392,7 +410,7 @@ const TABS=[
 ['grid',L('Grid koordinatı','Grid coordinates'),L('Plan müşiriyle okuma, kısa ve tam koordinat, MGRS bildirimi, iki nokta arası mesafe ve GİA, geri ve ileri kestirme.','Read with the coordinate scale, short and full references, MGRS, distance and grid azimuth between two points.')],
 ['aci',L('Açılar ve pusula','Angles & compass'),L('Milyem-derece, geri istikamet açısı, İSA güncelleme, P noktasıyla yönüne koyma, GİA-MİA çevirme, WMM2025 manyetik sapma, yaklaşma açısı, çentikli bilezik.','Mils-degrees, back azimuth, G-M angle update, orienting with point P, GA-MA conversion, grid convergence, bezel clicks.')],
 ['pafta',L('Pafta ve ölçek bilgisi','Sheets & scales'),L('Ölçek sınıfları, münhani ve grid aralıkları, paftanın 1/50 000 ve 1/25 000 paftalara bölünmesi.','Scale classes, contour and grid intervals, dividing a sheet into 1:50,000 and 1:25,000 sheets.')],
-['arazi',L('Arazi ve yürüyüş','Field & march'),L('Adım sayısıyla mesafe, yürüyüş süresi, grid koordinatlarından alan, kapalı yürüyüşün kapanma hatası ve ufuk mesafesi.','Pace count, march time, area from grid coordinates, closure of a loop and distance to the horizon.')],
+['arazi',L('Arazi ve yürüyüş','Field & march'),L('Adım sayısıyla mesafe, yürüyüş süresi, grid koordinatlarından alan ve ufuk mesafesi.','Pace count, march time, area from grid coordinates and distance to the horizon.')],
 ['hesap',L('Dört işlem','Calculator'),L('Parantezli hesap makinesi; ondalık için virgül ya da nokta.','Calculator with brackets; use a comma or a point for decimals.')],
 ['hakkinda',L('Hakkında','About'),'']];
 
@@ -643,13 +661,6 @@ calc(v){const lines=v.s('p').split(/\n/).map(s=>s.trim()).filter(Boolean);if(lin
  const A=polyArea(S.xy);let per=0;S.xy.forEach((p,i)=>{const q=S.xy[(i+1)%S.xy.length];per+=Math.hypot(q[0]-p[0],q[1]-p[1])});
  return{cap:L('Alan','Area'),big:A>=1e6?fmt(A/1e6,3)+' <small>km²</small>':fmt(A,0)+' <small>m²</small>',rows:[[L('Hektar','Hectares'),fmt(A/1e4,3)+' ha'],[L('Dönüm','Dönüm (1,000 m²)'),fmt(A/1000,2)],[L('Çevre','Perimeter'),lenM(per)],[L('Köşe sayısı','Corners'),String(S.xy.length)]],
   steps:[L('Alan = ½ × |Σ (xᵢ·yᵢ₊₁ − xᵢ₊₁·yᵢ)| (Gauss alan formülü)','Area = ½ × |Σ (xᵢ·yᵢ₊₁ − xᵢ₊₁·yᵢ)| (shoelace formula)'),L('Grid düzleminde hesaplanır; UTM ölçek etkisiyle arazideki alan binde birkaç farklı olabilir.','Computed on the grid plane; the UTM scale factor can change ground area by a few parts per thousand.')]}}},
-{tab:'arazi',id:'kapan',title:L('Kapalı yürüyüş: kapanma hatası','Closed traverse: closure error'),hint:L('Başladığın yere dönen bir turda her ayağın GİA’sını ve uzunluğunu yaz: “açı mesafe”. Başlangıca ne kadar uzak kapandığın hesaplanır.','For a loop back to the start, list each leg’s GA and length as “angle distance”. Shows how far from the start you close.'),
-f:[{id:'u',l:L('Açı birimi','Angle unit'),t:'s',o:AU,v:'mil'},{id:'p',l:L('Ayaklar (her satıra “açı mesafe”)','Legs (one “angle distance” per line)'),t:'ta',w:6,v:'800 500\n2400 500\n4000 505\n5600 498'}],
-calc(v){const u=v.s('u'),lines=v.s('p').split(/\n/).map(s=>s.trim()).filter(Boolean);if(lines.length<2)return E(L('En az 2 ayak yaz.','Enter at least 2 legs.'));let sE=0,sN=0,tot=0;
- for(let i=0;i<lines.length;i++){const q=lines[i].split(/[\s;]+/);const a=ang(q[0],u),d=num(q[1]);if(!Number.isFinite(a)||!(d>=0))return E(L(`${i+1}. satır okunamadı: “${lines[i]}”`,`Line ${i+1} could not be read: “${lines[i]}”`));sE+=d*Math.sin(rad(a));sN+=d*Math.cos(rad(a));tot+=d}
- const c=Math.hypot(sE,sN),r=c>0?tot/c:Infinity,bk=n360(deg(Math.atan2(-sE,-sN)));
- return{cap:L('Kapanma hatası','Closure error'),big:lenM(c),sub:c>0?`1 : ${fmt(r,0)}`:L('Tam kapandı','Closed exactly'),rows:[[L('Toplam yol','Total length'),lenM(tot)],['ΣΔE · ΣΔN',`${fmt(sE,1)} · ${fmt(sN,1)} m`],[L('Başlangıca dönüş','Back to start'),c>0?`${fmt(toMil(bk),0)} ${MIL} · ${lenM(c)}`:'—']],
-  steps:[L('Her ayak: ΔE = mesafe × sin(açı), ΔN = mesafe × cos(açı)','Each leg: ΔE = distance × sin(angle), ΔN = distance × cos(angle)'),`${L('Kapanma','Closure')} = √(${fmt(sE,1)}² + ${fmt(sN,1)}²) = ${fmt(c,1)} m`,`${L('Oran','Ratio')} = ${fmt(tot,0)} ÷ ${fmt(c,1)} = 1 : ${fmt(r,0)}`]}}},
 {tab:'arazi',id:'ufuk',title:L('Ufuk mesafesi','Distance to the horizon'),hint:L('Göz yüksekliğinden görünen ufka uzaklık (standart kırılma dahil). Hedefin yüksekliğini de yazarsan, hedefin tepesinin görünebileceği en uzak mesafe çıkar.','Distance to the visible horizon from eye height (standard refraction). Add a target height to get the farthest distance its top can be seen.'),
 f:[{id:'h',l:L('Göz yüksekliği (m)','Eye height (m)'),v:'1,7'},{id:'t',l:L('Hedef yüksekliği (m, isteğe bağlı)','Target height (m, optional)'),v:'40'}],
 calc(v){const h=v.n('h'),t=v.n('t')||0;if(!(h>=0)||!(t>=0))return E(L('Yükseklikleri metre olarak yaz.','Enter heights in metres.'));const a=horizonNm(h),b=horizonNm(t),k=1.852;
@@ -713,6 +724,7 @@ const PMAP={isa0:[['isa','i0'],['p','i0']],isaDir:[['isa','yon'],['p','yon']],is
 let pts=[];try{pts=JSON.parse(store.get('pts')||'[]')}catch(e){}
 const savePts=()=>{store.set('pts',JSON.stringify(pts));renderPts()};
 let fav=[];try{fav=JSON.parse(store.get('fav')||'[]')}catch(e){}
+fav=Array.isArray(fav)?fav.filter(id=>T.some(t=>t.id===id)):[];
 
 /* ---- HTML üretimi ---- */
 const STAR='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z"/></svg>';
@@ -755,10 +767,37 @@ const haritamHTML=`<div class="grid">
 const calcHTML=`<div class="grid"><article class="tool" id="t-calc"><header><h3>${L('Dört işlem','Calculator')}</h3></header><p class="hint">${L('Toplama, çıkarma, çarpma, bölme, parantez ve yüzde. Klavyeden de yazabilirsin.','Add, subtract, multiply, divide, brackets and percent. You can type too.')}</p><div class="fields"><div class="f w6"><label for="c-in">${L('İşlem','Expression')}</label><input id="c-in" class="calc-in" inputmode="decimal" autocomplete="off" value="(6${DEC}2 × 25000) ÷ 100"></div></div><div class="keys" id="keys"></div></article>
 <article class="tool"><div class="cap">${L('Sonuç','Result')}</div><div class="big" id="c-out">—</div><div class="acts"><button class="btn pri" id="c-save" type="button">${L('Geçmişe ekle','Add to history')}</button><button class="btn" id="c-copy" type="button">${L('Kopyala','Copy')}</button></div><div class="cap" style="margin-top:16px">${L('Geçmiş — dokununca işlem geri gelir','History — tap to reuse')}</div><ul class="hist" id="c-hist"></ul></article></div>`;
 const ICON='data:image/svg+xml,'+encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><defs><clipPath id=\"c\"><rect width=\"512\" height=\"512\" rx=\"0\"/></clipPath></defs><rect width=\"512\" height=\"512\" fill=\"#0f4c8a\"/><g clip-path=\"url(#c)\" fill=\"none\" stroke=\"#ffffff\" stroke-opacity=\".28\" stroke-width=\"7\"><ellipse cx=\"330\" cy=\"170\" rx=\"70\" ry=\"48\"/><ellipse cx=\"330\" cy=\"170\" rx=\"130\" ry=\"92\"/><ellipse cx=\"330\" cy=\"175\" rx=\"195\" ry=\"140\"/><ellipse cx=\"325\" cy=\"185\" rx=\"265\" ry=\"195\"/><ellipse cx=\"320\" cy=\"195\" rx=\"340\" ry=\"255\"/></g><g stroke=\"#ff6fb0\" stroke-width=\"6\" opacity=\".9\"><line x1=\"0\" y1=\"290\" x2=\"512\" y2=\"290\"/><line x1=\"256\" y1=\"0\" x2=\"256\" y2=\"512\"/></g><circle cx=\"256\" cy=\"290\" r=\"100\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"16\"/><path d=\"M256 192 L282 290 L256 274 L230 290 Z\" fill=\"#ffffff\"/><path d=\"M256 388 L282 290 L256 306 L230 290 Z\" fill=\"#ffffff\" fill-opacity=\".45\"/><text x=\"256\" y=\"172\" font-family=\"Barlow Condensed,Arial,sans-serif\" font-weight=\"bold\" font-size=\"58\" fill=\"#ffffff\" text-anchor=\"middle\">K</text></svg>");
+/* ---- ana menü ---- */
+const MI={haritam:'<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>',
+fav:'<path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/>',
+olcek:'<rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6.5 8v3M10.5 8v4M14.5 8v3M18.5 8v4"/>',
+rakim:'<path d="M2.5 19.5l6.5-11 4 6.5 2.5-4 6 8.5z"/><path d="M7 13.2c1.3.6 2.7.6 4 0"/>',
+cografi:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18"/>',
+grid:'<rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/>',
+aci:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+pafta:'<rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M12 3v18M3 12h18"/><path d="M7.5 12v9M3 16.5h9"/>',
+arazi:'<path d="M4 20c2-1 3-3 3-5s2-4 5-4 4-2 4-4"/><path d="M16 3v6M16 3l4 1.5L16 6"/><circle cx="4" cy="20" r="1.2"/>',
+hesap:'<rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 6.5h8M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01"/>',
+hakkinda:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/>'};
+const MD={haritam:L('Pafta bilgilerin, GPS, pusula, kayıtlı noktalar','Your sheet, GPS, compass, saved points'),
+fav:L('Yıldızladığın araçlar','Tools you starred'),
+olcek:L('Harita ↔ arazi uzunluğu, eğri yol','Map ↔ ground distance, curved route'),
+rakim:L('Tepe rakımı, ara nokta, eğim','Summit, intermediate point, slope'),
+cografi:L('Enlem-boylam okuma ve geçirme','Read and plot latitude-longitude'),
+grid:L('Koordinat, MGRS, mesafe, kestirme','Coordinates, MGRS, distance, resection'),
+aci:L('Milyem, İSA, GİA–MİA, manyetik sapma','Mils, G-M angle, GA–MA, declination'),
+pafta:L('Ölçek sınıfları, pafta bölme','Scale classes, sheet division'),
+arazi:L('Adım, yürüyüş süresi, alan, ufuk','Pace, march time, area, horizon'),
+hesap:L('Parantezli hesap makinesi','Calculator with brackets'),
+hakkinda:L('Sürüm, doğruluk testleri, gizlilik','Version, accuracy tests, privacy')};
+const micon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${MI[k]||''}</svg>`;
+const menuHTML=()=>`<div class="mhead"><h2>${L('Ne hesaplamak istiyorsun?','What do you want to work out?')}</h2><p class="intro">${L('Bir bölüm seç. Üstteki arama kutusuyla bütün araçlar arasında da arayabilirsin.','Pick a section, or use the search box above to search every tool.')}</p><button class="btn resume" type="button" id="m-resume" hidden></button></div>
+<div class="menu">${TABS.filter(t=>t[0]!=='menu').map(([k,n])=>{const c=T.filter(t=>t.tab===k).length;return`<button class="mtile${k==='haritam'?' wide':''}" type="button" data-go="${k}">${micon(k)}<span><b>${n.replace(/^★\s*/,'')}</b><small>${MD[k]||''}</small>${c?`<em>${c} ${L('araç','tools')}</em>`:''}</span></button>`}).join('')}</div>`;
+const backHTML=`<button class="back" type="button" data-go="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>${L('Ana menü','Home')}</button>`;
 const aboutHTML=`<div class="about"><h2>${APP}</h2><p class="intro" style="margin:0">${L('Sürüm','Version')} ${VER}</p>
 <div class="sig"><img src="${ICON}" alt=""><div><div class="cap">${L('Fikir ve tasarım','Idea and design')}</div><b>${OWNER}</b></div></div>
 <p>${L(`${APP}, haritada yapılan hesapları kâğıt, kalem ve cetvel kadar kolay; hesap makinesinden daha anlaşılır yapmak düşüncesiyle ${OWNER} tarafından tasarlandı. Her sonuç, nasıl bulunduğunu gösteren adımlarla birlikte gelir; böylece uygulama hem sahada hesap aracı hem de öğrenirken yardımcı olur.`,`${APP} was designed by ${OWNER} to make map calculations as easy as paper, pencil and ruler, and clearer than a calculator. Every result comes with the steps that produce it, so the app is both a field tool and a learning aid.`)}</p>
-<h3>${L('Neler yapar?','What it does')}</h3><ul><li>${L('Ölçek, eğri yol uzunluğu ve harita ↔ arazi çevirme','Scale, curved route length, map ↔ ground')}</li><li>${L('Münhanilerden rakım ve eğim','Elevation and slope from contours')}</li><li>${L('Coğrafi koordinat okuma ve haritaya geçirme','Reading and plotting geographic coordinates')}</li><li>${L('Grid kısa/tam koordinat, MGRS, ED50 ↔ WGS84','Grid references, MGRS, ED50 ↔ WGS84')}</li><li>${L('Milyem-derece, İSA, GİA ↔ MİA, P noktası, çentikli bilezik','Mils-degrees, G-M angle, GA ↔ MA, point P, bezel clicks')}</li><li>${L('GPS konumu, telefon pusulası ve kayıtlı noktalar','GPS position, phone compass and saved points')}</li><li>${L('WMM2025 manyetik sapma, geri ve ileri kestirme','WMM2025 declination, resection and intersection')}</li><li>${L('Adım sayısı, yürüyüş süresi, alan, kapanma hatası, ufuk mesafesi','Pace count, march time, area, closure error, horizon distance')}</li></ul>
+<h3>${L('Neler yapar?','What it does')}</h3><ul><li>${L('Ölçek, eğri yol uzunluğu ve harita ↔ arazi çevirme','Scale, curved route length, map ↔ ground')}</li><li>${L('Münhanilerden rakım ve eğim','Elevation and slope from contours')}</li><li>${L('Coğrafi koordinat okuma ve haritaya geçirme','Reading and plotting geographic coordinates')}</li><li>${L('Grid kısa/tam koordinat, MGRS, ED50 ↔ WGS84','Grid references, MGRS, ED50 ↔ WGS84')}</li><li>${L('Milyem-derece, İSA, GİA ↔ MİA, P noktası, çentikli bilezik','Mils-degrees, G-M angle, GA ↔ MA, point P, bezel clicks')}</li><li>${L('GPS konumu, telefon pusulası ve kayıtlı noktalar','GPS position, phone compass and saved points')}</li><li>${L('WMM2025 manyetik sapma, geri ve ileri kestirme','WMM2025 declination, resection and intersection')}</li><li>${L('Adım sayısı, yürüyüş süresi, alan, ufuk mesafesi','Pace count, march time, area, horizon distance')}</li></ul>
 <h3>${L('Doğruluk testleri','Accuracy tests')}</h3><p>${L('Uygulamanın hesapları, resmi ve bağımsız kaynaklardan alınmış referans değerlerle karşılaştırılır: NOAA (manyetik model), PROJ (UTM ve datum dönüşümü), GEOTRANS (MGRS), Bowditch (ufuk mesafesi).','The app’s calculations are compared with reference values from official and independent sources: NOAA (magnetic model), PROJ (UTM and datum), GEOTRANS (MGRS), Bowditch (horizon).')}</p><div class="acts"><button class="btn pri" type="button" id="run-tests">${L('Testleri çalıştır','Run tests')}</button></div><div id="test-out" aria-live="polite"></div>
 <h3>${L('Gizlilik','Privacy')}</h3><p>${L('Uygulama hiçbir kişisel veri toplamaz ve internete bir şey göndermez. Konum ve pusula yalnızca sen istediğinde, yalnızca bu cihazda kullanılır. Girdiğin değerler ve kayıtlı noktalar sadece bu cihazda saklanır.','The app collects no personal data and sends nothing over the internet. Location and compass are used only when you ask, only on this device. Your inputs and saved points are stored only on this device.')}</p>
 <h3>${L('Önemli not','Important')}</h3><p>${L('Sonuçlar eğitim ve planlama amaçlıdır. Arazide kararlarını harita, pusula ve yetkili kaynaklarla doğrula.','Results are for training and planning. In the field, confirm decisions with your map, compass and authoritative sources.')}</p>
@@ -771,7 +810,7 @@ $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.la
 $('#own').textContent=`© ${new Date().getFullYear()} ${OWNER} · ${APP} ${VER} · ${L('Fikir ve tasarım','Idea and design')}: ${OWNER}`;
 $('#foot').textContent=L('Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ↔ WGS84 çevirisi Haritam sekmesinde seçilen yöntemle yapılır (önerilen: Türkiye parametreleri, yaklaşık ±2 m; yerel düzeltmeyle daha iyi). Girdiğin değerler bu cihazda hatırlanır.','Grid calculations use 6° UTM zones. ED50 ↔ WGS84 uses the method chosen in My map (recommended: Türkiye parameters, about ±2 m; better with a local correction). Your inputs are remembered on this device.');
 $('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" data-t="${k}" aria-selected="false">${n}</button>`).join('');
-$('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" role="tabpanel" hidden>${intro?`<p class="intro">${intro}</p>`:''}${k==='haritam'?haritamHTML:k==='fav'?favHTML:k==='hesap'?calcHTML:k==='hakkinda'?aboutHTML:`<div class="grid" id="g-${k}">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('')+'<datalist id="ptlist"></datalist>';
+$('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" role="tabpanel" hidden>${k==='menu'?menuHTML():backHTML}${intro?`<p class="intro">${intro}</p>`:''}${k==='haritam'?haritamHTML:k==='fav'?favHTML:k==='hesap'?calcHTML:k==='hakkinda'?aboutHTML:`<div class="grid" id="g-${k}">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('')+'<datalist id="ptlist"></datalist>';
 
 /* ---- araç çalıştırma ---- */
 function run(t){const el=$('#t-'+t.id),get=id=>el.querySelector(`#${t.id}-${id}`),v={s:id=>get(id)?.value??'',n:id=>num(get(id)?.value)};
@@ -931,13 +970,14 @@ document.addEventListener('click',e=>{const b=e.target.closest('[data-copy]');if
 
 /* ---- sekmeler, favoriler, arama ---- */
 let cur='olcek';
-function show(k){if(!TABS.some(t=>t[0]===k))k='olcek';cur=k;
+function show(k){if(!TABS.some(t=>t[0]===k))k='menu';cur=k;
  T.forEach(t=>{const el=$('#t-'+t.id),home=$('#g-'+t.tab);if(k==='fav'&&fav.includes(t.id))$('#g-fav').appendChild(el);else if(el.parentNode!==home)home.appendChild(el)});
  if(k==='fav'){$('#fav-empty').hidden=fav.length>0;T.forEach(t=>{if(!fav.includes(t.id))return;$('#g-fav').appendChild($('#t-'+t.id))})}
  else T.filter(t=>t.tab===k).forEach(t=>$('#g-'+k).appendChild($('#t-'+t.id)));
- $$('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));$$('.panel').forEach(p=>p.hidden=p.id!=='p-'+k);store.set('tab',k);try{if(location.hash!=='#'+k)history.replaceState(null,'','#'+k)}catch(e){}}
+ $$('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));$$('.panel').forEach(p=>p.hidden=p.id!=='p-'+k);if(k!=='menu')store.set('tab',k);else{const r=$('#m-resume'),last=store.get('tab');if(r){const ok=last&&last!=='menu'&&TABNAME[last];r.hidden=!ok;if(ok){r.dataset.go=last;r.textContent=L('Kaldığın yerden devam et: ','Continue where you left off: ')+TABNAME[last].replace(/^★\s*/,'')}}}try{if(location.hash!=='#'+k)history.replaceState(null,'','#'+k)}catch(e){}}
 function go(tab,elId){show(tab);const el=document.getElementById(elId);if(el){el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}}
 $('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.dataset.t)});
+$('#main').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;show(b.dataset.go);try{window.scrollTo({top:0,behavior:'auto'})}catch(x){window.scrollTo(0,0)}});
 window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 const fold=s=>String(s).toLocaleLowerCase(LOC).replace(/ı/g,'i').normalize('NFD').replace(/[̀-ͯ]/g,'');
 const TABNAME=Object.fromEntries(TABS.map(t=>[t[0],t[1]]));
@@ -953,7 +993,7 @@ qres.addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)re
 document.addEventListener('click',e=>{if(!e.target.closest('.search'))qres.hidden=true});
 $$('.lang button').forEach(b=>b.addEventListener('click',()=>{store.set('lang',b.dataset.lang);location.reload()}));
 $('#run-tests').addEventListener('click',showTests);
-show(location.hash.slice(1)||store.get('tab')||'haritam');
+show(location.hash.slice(1)||'menu');
 {let p='';for(let i=1;i<9;i++){const r=i*34;let d='';for(let a=0;a<=360;a+=12){const k=rad(a),w=r*(1+.12*Math.sin(3*k+i)+.06*Math.cos(5*k));d+=(a?'L':'M')+(980+w*1.6*Math.cos(k)).toFixed(1)+' '+(90+w*.8*Math.sin(k)).toFixed(1)}p+=`<path d="${d}Z" fill="none" stroke="#fff" stroke-width="1.2"/>`}$('#topo').innerHTML=p}
 }
 if('serviceWorker' in navigator&&window.isSecureContext&&/^https?:$/.test(location.protocol)){try{navigator.serviceWorker.register('sw.js').catch(()=>{})}catch(e){}}
