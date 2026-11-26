@@ -126,8 +126,9 @@
 *{box-sizing:border-box;min-width:0}
 [hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
-h1,h2,h3,.big,.tab{font-family:"Barlow Condensed",Barlow,sans-serif}
+h1,h2,h3,.big{font-family:"Barlow Condensed",Barlow,sans-serif}
 header.top{position:relative;z-index:5;background:var(--blue);color:#fff;padding:calc(20px + env(safe-area-inset-top)) max(4vw,16px,env(safe-area-inset-right)) 0 max(4vw,16px,env(safe-area-inset-left))}
+#appname{cursor:pointer}header.top{padding-bottom:6px}
 header.top svg.topo{position:absolute;inset:0;width:100%;height:100%;opacity:.22;pointer-events:none}
 .hrow{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
 h1{margin:0;font-size:clamp(32px,5vw,46px);line-height:1.05;font-weight:700}
@@ -142,9 +143,6 @@ header.top p{position:relative;margin:4px 0 12px;max-width:68ch;color:#d6e6f7}
 #qres{position:absolute;z-index:20;left:0;right:0;top:50px;margin:0;padding:6px;list-style:none;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;box-shadow:0 10px 30px rgba(0,0,0,.25);max-height:60vh;overflow:auto}
 #qres button{width:100%;text-align:left;min-height:44px;border:0;background:none;color:var(--ink);font:15px Barlow;padding:6px 10px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;gap:10px}
 #qres button:hover,#qres button:focus-visible{background:var(--field)}#qres small{color:var(--mut)}
-.tabs{position:relative;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
-.tab{flex:none;min-height:46px;padding:8px 16px;border:0;border-radius:10px 10px 0 0;background:rgba(255,255,255,.12);color:#fff;font-size:18px;font-weight:600;cursor:pointer}
-.tab[aria-selected=true]{background:var(--bg);color:var(--ink)}
 :focus-visible{outline:3px solid var(--mag);outline-offset:2px}
 main{max-width:1240px;margin:0 auto;padding:clamp(18px,3vw,36px) max(4vw,16px,env(safe-area-inset-right)) 40px max(4vw,16px,env(safe-area-inset-left))}
 .intro{margin:0 0 18px;color:var(--mut);max-width:80ch}
@@ -205,6 +203,7 @@ h4{margin:2px 0 0;font:600 20px/1.15 "Barlow Condensed"}.where{margin:2px 0 8px;
 details.adv{background:none;padding:0;margin:0}details.adv>summary{list-style:none;display:flex;flex-direction:column;gap:2px}details.adv>summary::-webkit-details-marker{display:none}
 details.adv>summary h3::after{content:" ▸";color:var(--mut)}details.adv[open]>summary h3::after{content:" ▾"}
 .tlist{list-style:none;padding:0;margin:10px 0 0;display:grid;gap:6px}.tlist li{padding:8px 10px;border:1px solid var(--line);border-radius:8px;font-size:15px}.tlist small{color:var(--mut)}
+main .panel:not(#p-menu)>.back{margin-top:-4px}
 .mhead h2{margin:4px 0 4px;font-size:28px}.mhead .intro{margin-bottom:12px}
 .resume{margin:0 0 16px;border-color:var(--blue2);color:var(--blue2)}
 .menu{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-bottom:8px}
@@ -227,17 +226,9 @@ details.adv>summary h3::after{content:" ▸";color:var(--mut)}details.adv[open]>
 .about .sig img{width:56px;height:56px;border-radius:12px;flex:none}.about .sig b{font:700 22px "Barlow Condensed"}
 .about ul{padding-left:20px}.about li{margin:3px 0}
 .empty{color:var(--mut);font-size:15px;padding:6px 0}
-/* hesap makinesi */
-.calc-in{font:600 22px "Barlow Condensed",sans-serif;text-align:right}
-.keys{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:10px}
-.keys button{min-height:54px;border:1px solid var(--line);border-radius:10px;background:var(--field);color:var(--ink);font:600 22px "Barlow Condensed",sans-serif;cursor:pointer}
-.keys .op{color:var(--blue2)}.keys .eq{background:var(--blue2);color:light-dark(#fff,#08131d);border-color:var(--blue2)}
-.hist{list-style:none;margin:0;padding:0}
-.hist button{width:100%;display:flex;justify-content:space-between;gap:12px;min-height:44px;padding:6px 4px;border:0;border-bottom:1px solid var(--line);background:none;color:var(--ink);font:15px Barlow;cursor:pointer;text-align:left}
-.hist b{font-variant-numeric:tabular-nums;white-space:nowrap}
 footer{max-width:1240px;margin:0 auto;padding:18px max(4vw,16px) calc(32px + env(safe-area-inset-bottom));color:var(--mut);font-size:13px;border-top:1px solid var(--line)}
 footer .own{font-size:15px;color:var(--ink);font-weight:600;margin-bottom:4px}
-@media(max-width:600px){.tab{font-size:16px;padding:8px 12px}.tool{padding:14px}.fields{gap:8px}}
+@media(max-width:600px){.tool{padding:14px}.fields{gap:8px}}
 @media(prefers-reduced-motion:no-preference){.panel .tool{animation:in .25s ease-out both}@keyframes in{from{opacity:0;transform:translateY(6px)}}}
 @media(prefers-reduced-motion:reduce){.tool.flash{animation:none}}
 </style>
@@ -245,10 +236,9 @@ footer .own{font-size:15px;color:var(--ink);font-weight:600;margin-bottom:4px}
 <body>
 <header class="top">
 <svg class="topo" viewBox="0 0 1200 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true" id="topo"></svg>
-<div class="hrow"><h1 id="appname">Harita Cetveli</h1><span class="betab">BETA</span><div class="lang" role="group" aria-label="Dil / Language"><button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button></div></div>
+<div class="hrow"><h1 id="appname" role="link" tabindex="0" title="Ana menü">Harita Cetveli</h1><span class="betab">BETA</span><div class="lang" role="group" aria-label="Dil / Language"><button type="button" data-lang="tr">TR</button><button type="button" data-lang="en">EN</button></div></div>
 <p id="tagline"></p>
 <div class="search" role="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg><input id="q" type="search" autocomplete="off" aria-controls="qres"><ul id="qres" hidden></ul></div>
-<nav class="tabs" role="tablist" id="tabs"></nav>
 </header>
 <main id="main"></main>
 <footer><div class="own" id="own"></div><div id="foot"></div></footer>
@@ -259,7 +249,7 @@ const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const store={get(k){try{return localStorage.getItem('hc2b:'+k)}catch(e){return null}},set(k,v){try{localStorage.setItem('hc2b:'+k,v)}catch(e){}}};
 const EN=store.get('lang')==='en',L=(tr,en)=>EN?en:tr,LOC=EN?'en-US':'tr-TR',DEC=EN?'.':',';
 document.documentElement.lang=EN?'en':'tr';
-const OWNER='Miraç Şen',APP=L('Harita Cetveli Beta','Map Ruler Beta'),VER='2.5 beta 2';
+const OWNER='Miraç Şen',APP=L('Harita Cetveli Beta','Map Ruler Beta'),VER='2.5 (deneme 3)';
 const num=v=>{v=String(v??'').trim().replace(/\s/g,'');if(/,/.test(v)&&!/\./.test(v))v=v.replace(',','.');else v=v.replace(/,/g,'');return v===''?NaN:Number(v)};
 const fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString(LOC,{maximumFractionDigits:d}):'—';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -411,7 +401,6 @@ const TABS=[
 ['aci',L('Açılar ve pusula','Angles & compass'),L('Milyem-derece, geri istikamet açısı, İSA güncelleme, P noktasıyla yönüne koyma, GİA-MİA çevirme, WMM2025 manyetik sapma, yaklaşma açısı, çentikli bilezik.','Mils-degrees, back azimuth, G-M angle update, orienting with point P, GA-MA conversion, grid convergence, bezel clicks.')],
 ['pafta',L('Pafta ve ölçek bilgisi','Sheets & scales'),L('Ölçek sınıfları, münhani ve grid aralıkları, paftanın 1/50 000 ve 1/25 000 paftalara bölünmesi.','Scale classes, contour and grid intervals, dividing a sheet into 1:50,000 and 1:25,000 sheets.')],
 ['arazi',L('Arazi ve yürüyüş','Field & march'),L('Adım sayısıyla mesafe, yürüyüş süresi, grid koordinatlarından alan ve ufuk mesafesi.','Pace count, march time, area from grid coordinates and distance to the horizon.')],
-['hesap',L('Dört işlem','Calculator'),L('Parantezli hesap makinesi; ondalık için virgül ya da nokta.','Calculator with brackets; use a comma or a point for decimals.')],
 ['hakkinda',L('Hakkında','About'),'']];
 
 /* ---- araçlar ---- */
@@ -764,8 +753,6 @@ const haritamHTML=`<div class="grid">
 <div class="f"><label for="lc-ew">${L('Aynı nokta — WGS84 sağa','Same point — WGS84 easting')}</label><input id="lc-ew" inputmode="numeric" value="${esc(prof.lcEw)}" placeholder="702505"></div><div class="f"><label for="lc-nw">${L('WGS84 yukarı','WGS84 northing')}</label><input id="lc-nw" inputmode="numeric" value="${esc(prof.lcNw)}" placeholder="4283735"></div>
 <div class="f w6"><label for="lc-on">${L('Yerel düzeltme','Local correction')}</label><select id="lc-on">${opt([['0',L('Kullanma','Off')],['1',L('Kullan','On')]],prof.lcOn)}</select></div></div>
 <div class="acts"><button class="btn" type="button" id="lc-gps">${L('WGS84 değerini GPS’ten al','Take WGS84 from GPS')}</button></div><div class="out" id="lc-out" aria-live="polite"></div></details></article></div>`;
-const calcHTML=`<div class="grid"><article class="tool" id="t-calc"><header><h3>${L('Dört işlem','Calculator')}</h3></header><p class="hint">${L('Toplama, çıkarma, çarpma, bölme, parantez ve yüzde. Klavyeden de yazabilirsin.','Add, subtract, multiply, divide, brackets and percent. You can type too.')}</p><div class="fields"><div class="f w6"><label for="c-in">${L('İşlem','Expression')}</label><input id="c-in" class="calc-in" inputmode="decimal" autocomplete="off" value="(6${DEC}2 × 25000) ÷ 100"></div></div><div class="keys" id="keys"></div></article>
-<article class="tool"><div class="cap">${L('Sonuç','Result')}</div><div class="big" id="c-out">—</div><div class="acts"><button class="btn pri" id="c-save" type="button">${L('Geçmişe ekle','Add to history')}</button><button class="btn" id="c-copy" type="button">${L('Kopyala','Copy')}</button></div><div class="cap" style="margin-top:16px">${L('Geçmiş — dokununca işlem geri gelir','History — tap to reuse')}</div><ul class="hist" id="c-hist"></ul></article></div>`;
 const ICON='data:image/svg+xml,'+encodeURIComponent("<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><defs><clipPath id=\"c\"><rect width=\"512\" height=\"512\" rx=\"0\"/></clipPath></defs><rect width=\"512\" height=\"512\" fill=\"#0f4c8a\"/><g clip-path=\"url(#c)\" fill=\"none\" stroke=\"#ffffff\" stroke-opacity=\".28\" stroke-width=\"7\"><ellipse cx=\"330\" cy=\"170\" rx=\"70\" ry=\"48\"/><ellipse cx=\"330\" cy=\"170\" rx=\"130\" ry=\"92\"/><ellipse cx=\"330\" cy=\"175\" rx=\"195\" ry=\"140\"/><ellipse cx=\"325\" cy=\"185\" rx=\"265\" ry=\"195\"/><ellipse cx=\"320\" cy=\"195\" rx=\"340\" ry=\"255\"/></g><g stroke=\"#ff6fb0\" stroke-width=\"6\" opacity=\".9\"><line x1=\"0\" y1=\"290\" x2=\"512\" y2=\"290\"/><line x1=\"256\" y1=\"0\" x2=\"256\" y2=\"512\"/></g><circle cx=\"256\" cy=\"290\" r=\"100\" fill=\"none\" stroke=\"#ffffff\" stroke-width=\"16\"/><path d=\"M256 192 L282 290 L256 274 L230 290 Z\" fill=\"#ffffff\"/><path d=\"M256 388 L282 290 L256 306 L230 290 Z\" fill=\"#ffffff\" fill-opacity=\".45\"/><text x=\"256\" y=\"172\" font-family=\"Barlow Condensed,Arial,sans-serif\" font-weight=\"bold\" font-size=\"58\" fill=\"#ffffff\" text-anchor=\"middle\">K</text></svg>");
 /* ---- ana menü ---- */
 const MI={haritam:'<path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z"/><path d="M9 4v14M15 6v14"/>',
@@ -777,7 +764,6 @@ grid:'<rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M9 3v18M15 3v1
 aci:'<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
 pafta:'<rect x="3" y="3" width="18" height="18" rx="1.5"/><path d="M12 3v18M3 12h18"/><path d="M7.5 12v9M3 16.5h9"/>',
 arazi:'<path d="M4 20c2-1 3-3 3-5s2-4 5-4 4-2 4-4"/><path d="M16 3v6M16 3l4 1.5L16 6"/><circle cx="4" cy="20" r="1.2"/>',
-hesap:'<rect x="5" y="2.5" width="14" height="19" rx="2"/><path d="M8 6.5h8M8.5 11h.01M12 11h.01M15.5 11h.01M8.5 14.5h.01M12 14.5h.01M15.5 14.5h.01M8.5 18h.01M12 18h.01M15.5 18h.01"/>',
 hakkinda:'<circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5h.01"/>'};
 const MD={haritam:L('Pafta bilgilerin, GPS, pusula, kayıtlı noktalar','Your sheet, GPS, compass, saved points'),
 fav:L('Yıldızladığın araçlar','Tools you starred'),
@@ -788,7 +774,6 @@ grid:L('Koordinat, MGRS, mesafe, kestirme','Coordinates, MGRS, distance, resecti
 aci:L('Milyem, İSA, GİA–MİA, manyetik sapma','Mils, G-M angle, GA–MA, declination'),
 pafta:L('Ölçek sınıfları, pafta bölme','Scale classes, sheet division'),
 arazi:L('Adım, yürüyüş süresi, alan, ufuk','Pace, march time, area, horizon'),
-hesap:L('Parantezli hesap makinesi','Calculator with brackets'),
 hakkinda:L('Sürüm, doğruluk testleri, gizlilik','Version, accuracy tests, privacy')};
 const micon=k=>`<svg viewBox="0 0 24 24" aria-hidden="true">${MI[k]||''}</svg>`;
 const menuHTML=()=>`<div class="mhead"><h2>${L('Ne hesaplamak istiyorsun?','What do you want to work out?')}</h2><p class="intro">${L('Bir bölüm seç. Üstteki arama kutusuyla bütün araçlar arasında da arayabilirsin.','Pick a section, or use the search box above to search every tool.')}</p><button class="btn resume" type="button" id="m-resume" hidden></button></div>
@@ -808,9 +793,9 @@ $('#appname').textContent=APP;$('#tagline').textContent=L('Haritadan okuduğun s
 $('#q').placeholder=L('Araç ara: rakım, MGRS, pusula…','Search tools: elevation, MGRS, compass…');
 $$('.lang button').forEach(b=>b.setAttribute('aria-pressed',String((b.dataset.lang==='en')===EN)));
 $('#own').textContent=`© ${new Date().getFullYear()} ${OWNER} · ${APP} ${VER} · ${L('Fikir ve tasarım','Idea and design')}: ${OWNER}`;
-$('#foot').textContent=L('Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ↔ WGS84 çevirisi Haritam sekmesinde seçilen yöntemle yapılır (önerilen: Türkiye parametreleri, yaklaşık ±2 m; yerel düzeltmeyle daha iyi). Girdiğin değerler bu cihazda hatırlanır.','Grid calculations use 6° UTM zones. ED50 ↔ WGS84 uses the method chosen in My map (recommended: Türkiye parameters, about ±2 m; better with a local correction). Your inputs are remembered on this device.');
-$('#tabs').innerHTML=TABS.map(([k,n])=>`<button class="tab" role="tab" data-t="${k}" aria-selected="false">${n}</button>`).join('');
-$('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" role="tabpanel" hidden>${k==='menu'?menuHTML():backHTML}${intro?`<p class="intro">${intro}</p>`:''}${k==='haritam'?haritamHTML:k==='fav'?favHTML:k==='hesap'?calcHTML:k==='hakkinda'?aboutHTML:`<div class="grid" id="g-${k}">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('')+'<datalist id="ptlist"></datalist>';
+$('#foot').textContent=L('Grid hesapları UTM 6° dilimleriyle yapılır. ED50 ↔ WGS84 çevirisi Haritam bölümünde seçilen yöntemle yapılır (önerilen: Türkiye parametreleri, yaklaşık ±2 m; yerel düzeltmeyle daha iyi). Girdiğin değerler bu cihazda hatırlanır.','Grid calculations use 6° UTM zones. ED50 ↔ WGS84 uses the method chosen in My map (recommended: Türkiye parameters, about ±2 m; better with a local correction). Your inputs are remembered on this device.');
+
+$('#main').innerHTML=TABS.map(([k,n,intro])=>`<section class="panel" id="p-${k}" hidden>${k==='menu'?menuHTML():backHTML}${intro?`<p class="intro">${intro}</p>`:''}${k==='haritam'?haritamHTML:k==='fav'?favHTML:k==='hakkinda'?aboutHTML:`<div class="grid" id="g-${k}">${T.filter(t=>t.tab===k).map(toolHTML).join('')}</div>`}</section>`).join('')+'<datalist id="ptlist"></datalist>';
 
 /* ---- araç çalıştırma ---- */
 function run(t){const el=$('#t-'+t.id),get=id=>el.querySelector(`#${t.id}-${id}`),v={s:id=>get(id)?.value??'',n:id=>num(get(id)?.value)};
@@ -906,26 +891,6 @@ $('#cmp-go').addEventListener('click',async()=>{const o=$('#cmp-out');let denied
 $('#cmp-hold').addEventListener('click',()=>{if(held==null){if(hd==null)return;held=hd;$('#cmp-hold').textContent=L('Serbest bırak','Release');$('#cmp-send').disabled=false}else{held=null;$('#cmp-hold').textContent=L('Değeri sabitle','Hold value');$('#cmp-send').disabled=true}showCmp()});
 $('#cmp-send').addEventListener('click',()=>{if(held==null)return;setField('gm','x',Math.round(n64(toMil(held))));setField('gm','tip','mia');setField('gm','u','mil');setField('gm','isa',prof.isa);run(TOOL.gm);go('aci','t-gm')});
 
-/* ---- dört işlem ---- */
-function calc(str){const s=str.replace(/[×xX]/g,'*').replace(/[÷:]/g,'/').replace(/−/g,'-');let i=0;const peek=()=>{while(s[i]===' ')i++;return s[i]};
- const pct=r=>{if(peek()==='%'){i++;return r/100}return r};
- function atom(){const c=peek();if(c==='-'){i++;return-atom()}if(c==='+'){i++;return atom()}if(c==='('){i++;const r=expr();if(peek()!==')')throw 0;i++;return pct(r)}
-  const m=/^[0-9]+(?:[.,][0-9]+)?|^[.,][0-9]+/.exec(s.slice(i));if(!m)throw 0;i+=m[0].length;return pct(Number(m[0].replace(',','.')))}
- function term(){let r=atom();for(;;){const c=peek();if(c==='*'){i++;r*=atom()}else if(c==='/'){i++;const d=atom();if(d===0)throw 'z';r/=d}else return r}}
- function expr(){let r=term();for(;;){const c=peek();if(c==='+'){i++;r+=term()}else if(c==='-'){i++;r-=term()}else return r}}
- const r=expr();if(peek()!==undefined)throw 0;return r}
-const KEYS=['C','(',')','÷','7','8','9','×','4','5','6','−','1','2','3','+','0',DEC,'⌫','='];
-$('#keys').innerHTML=KEYS.map(k=>`<button type="button" class="${'÷×−+()'.includes(k)?'op':k==='='?'eq':''}" data-k="${k}" aria-label="${k==='⌫'?L('Sil','Delete'):k}">${k}</button>`).join('');
-let hist=[];try{hist=JSON.parse(store.get('hist')||'[]')}catch(e){}
-const cin=$('#c-in'),cout=$('#c-out');let last=NaN;{const s=store.get('c-in');if(s!==null)cin.value=s}
-function runCalc(){try{last=calc(cin.value);cout.textContent=fmt(last,10)}catch(e){last=NaN;cout.innerHTML=cin.value.trim()?`<span class="err" style="font-size:24px">${e==='z'?L('Sıfıra bölünemez','Cannot divide by zero'):L('İşlem tamamlanmadı','Incomplete expression')}</span>`:'—'}store.set('c-in',cin.value)}
-function renderHist(){$('#c-hist').innerHTML=hist.length?hist.map((h,j)=>`<li><button type="button" data-h="${j}"><span>${esc(h.e)}</span><b>= ${esc(fmt(h.r,10))}</b></button></li>`).join(''):`<li class="empty">${L('Henüz kayıt yok.','No history yet.')}</li>`}
-function saveHist(){if(!Number.isFinite(last))return;hist.unshift({e:cin.value,r:last});hist=hist.slice(0,12);store.set('hist',JSON.stringify(hist));renderHist()}
-$('#keys').addEventListener('click',e=>{const k=e.target.closest('[data-k]')?.dataset.k;if(!k)return;if(k==='C')cin.value='';else if(k==='⌫')cin.value=cin.value.slice(0,-1);else if(k==='='){saveHist();if(Number.isFinite(last))cin.value=String(last).replace('.',DEC)}else cin.value+=('÷×−+'.includes(k)?' '+k+' ':k);runCalc()});
-cin.addEventListener('input',runCalc);cin.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();saveHist()}});
-$('#c-save').addEventListener('click',saveHist);$('#c-hist').addEventListener('click',e=>{const b=e.target.closest('[data-h]');if(b){cin.value=hist[b.dataset.h].e;runCalc()}});
-$('#c-copy').addEventListener('click',e=>copy(e.target,Number.isFinite(last)?fmt(last,10):''));
-runCalc();renderHist();
 
 /* ---- beta: dışa aktarma ---- */
 function ptsCSV(){const rows=[[L('ad','name'),L('saga','easting'),L('yukari','northing'),L('dilim','zone'),'datum',L('enlem_wgs84','lat_wgs84'),L('boylam_wgs84','lon_wgs84'),'mgrs']];pts.forEach(p=>{const g=ptGeo(p);rows.push([p.name,p.E,p.N,p.z||'',p.dt==='wgs'?'WGS84':'ED50',g?g.lat.toFixed(6):'',g?g.lon.toFixed(6):'',g&&p.z&&p.E>1e5&&p.E<9e5?mgrs(p.z,g.lat,p.E,p.N,5).replace(/ /g,''):''])});
@@ -974,16 +939,17 @@ function show(k){if(!TABS.some(t=>t[0]===k))k='menu';cur=k;
  T.forEach(t=>{const el=$('#t-'+t.id),home=$('#g-'+t.tab);if(k==='fav'&&fav.includes(t.id))$('#g-fav').appendChild(el);else if(el.parentNode!==home)home.appendChild(el)});
  if(k==='fav'){$('#fav-empty').hidden=fav.length>0;T.forEach(t=>{if(!fav.includes(t.id))return;$('#g-fav').appendChild($('#t-'+t.id))})}
  else T.filter(t=>t.tab===k).forEach(t=>$('#g-'+k).appendChild($('#t-'+t.id)));
- $$('.tab').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===k));$$('.panel').forEach(p=>p.hidden=p.id!=='p-'+k);if(k!=='menu')store.set('tab',k);else{const r=$('#m-resume'),last=store.get('tab');if(r){const ok=last&&last!=='menu'&&TABNAME[last];r.hidden=!ok;if(ok){r.dataset.go=last;r.textContent=L('Kaldığın yerden devam et: ','Continue where you left off: ')+TABNAME[last].replace(/^★\s*/,'')}}}try{if(location.hash!=='#'+k)history.replaceState(null,'','#'+k)}catch(e){}}
+ $$('.panel').forEach(p=>p.hidden=p.id!=='p-'+k);if(k!=='menu')store.set('tab',k);else{const r=$('#m-resume'),last=store.get('tab');if(r){const ok=last&&last!=='menu'&&TABNAME[last];r.hidden=!ok;if(ok){r.dataset.go=last;r.textContent=L('Kaldığın yerden devam et: ','Continue where you left off: ')+TABNAME[last].replace(/^★\s*/,'')}}}try{if(location.hash!=='#'+k)history.replaceState(null,'','#'+k)}catch(e){}}
 function go(tab,elId){show(tab);const el=document.getElementById(elId);if(el){el.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')}}
-$('#tabs').addEventListener('click',e=>{const b=e.target.closest('.tab');if(b)show(b.dataset.t)});
+
+{const an=$('#appname'),home=()=>{show('menu');try{window.scrollTo({top:0})}catch(x){window.scrollTo(0,0)}};an.title=L('Ana menü','Home');an.addEventListener('click',home);an.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();home()}})}
 $('#main').addEventListener('click',e=>{const b=e.target.closest('[data-go]');if(!b)return;show(b.dataset.go);try{window.scrollTo({top:0,behavior:'auto'})}catch(x){window.scrollTo(0,0)}});
 window.addEventListener('hashchange',()=>show(location.hash.slice(1)));
 const fold=s=>String(s).toLocaleLowerCase(LOC).replace(/ı/g,'i').normalize('NFD').replace(/[̀-ͯ]/g,'');
 const TABNAME=Object.fromEntries(TABS.map(t=>[t[0],t[1]]));
 const IDX=[...T.map(t=>({tab:t.tab,id:'t-'+t.id,title:t.title,text:fold(t.title+' '+t.hint)})),
  ...[['t-prof',L('Haritam (ölçek, dilim, grid, köşe değerleri, sapma diyagramı, İSA)','My map (scale, zone, grid, corner values, declination diagram)')],['t-lc',L('ED50 ↔ WGS84 hassas dönüşüm (datum, yerel düzeltme)','Precise ED50 ↔ WGS84 (datum, local correction)')],['t-gps',L('Konumum (GPS, koordinat, MGRS)','My position (GPS, coordinates, MGRS)')],['t-cmp',L('Telefon pusulası (MİA, GİA)','Phone compass (MA, GA)')],['t-pts',L('Kayıtlı noktalar','Saved points')]].map(([id,ti])=>({tab:'haritam',id,title:ti,text:fold(ti)})),
- {tab:'hesap',id:'t-calc',title:L('Dört işlem (hesap makinesi)','Calculator'),text:fold(L('dört işlem hesap makinesi toplama çarpma','calculator add multiply'))},{tab:'hakkinda',id:'p-hakkinda',title:L('Hakkında','About'),text:fold(L('hakkında gizlilik sürüm '+OWNER,'about privacy version '+OWNER))}];
+{tab:'hakkinda',id:'p-hakkinda',title:L('Hakkında','About'),text:fold(L('hakkında gizlilik sürüm '+OWNER,'about privacy version '+OWNER))}];
 const q=$('#q'),qres=$('#qres');
 function search(){const s=fold(q.value.trim());if(!s){qres.hidden=true;return}const words=s.split(/\s+/);const hits=IDX.filter(x=>words.every(w=>x.text.includes(w))).slice(0,8);
  qres.innerHTML=hits.length?hits.map(h=>`<li><button type="button" data-go="${h.tab}|${h.id}"><span>${h.title}</span><small>${TABNAME[h.tab]}</small></button></li>`).join(''):`<li class="empty" style="padding:8px 10px">${L('Sonuç yok','No results')}</li>`;qres.hidden=false}
